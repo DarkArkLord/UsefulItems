@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UsefulItems.CSharpFramework.SqlTools.ORM.TypeCasting
+﻿namespace UsefulItems.CSharpFramework.SqlTools.ORM.TypeCasting
 {
     public static class CastersKeeper
     {

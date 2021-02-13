@@ -1,10 +1,5 @@
-﻿using UsefulItems.CSharpFramework.SqlTools.ORM.Rules;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
+using UsefulItems.CSharpFramework.SqlTools.ORM.Rules;
 
 namespace UsefulItems.CSharpFramework.SqlTools.ORM.Handlers
 {
