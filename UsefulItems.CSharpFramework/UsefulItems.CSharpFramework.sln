@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework.SqlTools", "UsefulItems.CSharpFramework.SqlTools\UsefulItems.CSharpFramework.SqlTools.csproj", "{69516E02-B170-4F7E-A5DB-72C7C5D58F88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework.Validation", "UsefulItems.CSharpFramework.Validation\UsefulItems.CSharpFramework.Validation.csproj", "{8358C5B2-9D77-427E-9F02-8B4E18B99698}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{69516E02-B170-4F7E-A5DB-72C7C5D58F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69516E02-B170-4F7E-A5DB-72C7C5D58F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69516E02-B170-4F7E-A5DB-72C7C5D58F88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8358C5B2-9D77-427E-9F02-8B4E18B99698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8358C5B2-9D77-427E-9F02-8B4E18B99698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8358C5B2-9D77-427E-9F02-8B4E18B99698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8358C5B2-9D77-427E-9F02-8B4E18B99698}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
