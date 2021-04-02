@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework.SomeStuff", "UsefulItems.CSharpFramework.SomeStuff\UsefulItems.CSharpFramework.SomeStuff.csproj", "{5C95B693-F060-421B-BA59-DCCB7AD46689}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulItems.CSharpFramework.FP", "UsefulItems.CSharpFramework.FP\UsefulItems.CSharpFramework.FP.csproj", "{278406A6-E3B1-490C-93F1-6FBED9778973}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5C95B693-F060-421B-BA59-DCCB7AD46689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C95B693-F060-421B-BA59-DCCB7AD46689}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C95B693-F060-421B-BA59-DCCB7AD46689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{278406A6-E3B1-490C-93F1-6FBED9778973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{278406A6-E3B1-490C-93F1-6FBED9778973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{278406A6-E3B1-490C-93F1-6FBED9778973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{278406A6-E3B1-490C-93F1-6FBED9778973}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
