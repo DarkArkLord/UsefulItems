@@ -164,9 +164,9 @@ function RotateСube(сube, angle3) {
         res.y = t.x;
         res.z = t.y;
 
-        t = RotatePoint2({ x: res.x, y: res.z }, angle3.y);
-        res.x = t.x;
-        res.z = t.y;
+        t = RotatePoint2({ x: res.z, y: res.x }, angle3.y);
+        res.z = t.x;
+        res.x = t.y;
 
         t = RotatePoint2({ x: res.x, y: res.y }, angle3.z);
         res.x = t.x;
