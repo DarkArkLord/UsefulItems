@@ -1,5 +1,5 @@
 ﻿using System;
-using UsefulItems.CSharp.FunctionalProgramming.Monad.Maybe;
+using UsefulItems.CSharp.Trash.Hacks;
 
 namespace UsefulItems.CSharp.Test.CoreConsole
 {
@@ -9,31 +9,10 @@ namespace UsefulItems.CSharp.Test.CoreConsole
         {
             Console.WriteLine("Hello Core!");
 
-            var tests = new (Maybe<int> a, Maybe<int> b)[]
-            {
-                (Maybe<int>.Just(1), Maybe<int>.Just(1)),
-                (Maybe<int>.Just(1), Maybe<int>.Just(2)),
-                (Maybe<int>.Just(1), Maybe<int>.Nothing),
-                (Maybe<int>.Just(2), Maybe<int>.Just(1)),
-                (Maybe<int>.Just(2), Maybe<int>.Just(2)),
-                (Maybe<int>.Just(2), Maybe<int>.Nothing),
-                (Maybe<int>.Nothing, Maybe<int>.Just(1)),
-                (Maybe<int>.Nothing, Maybe<int>.Just(2)),
-                (Maybe<int>.Nothing, Maybe<int>.Nothing),
-            };
-
-            foreach (var test in tests)
-            {
-                Check(test.a, test.b);
-            }
+            StringHack.Test();
 
             Console.WriteLine("\nend");
             Console.ReadKey();
-        }
-
-        static void Check(Maybe<int> a, Maybe<int> b)
-        {
-            Console.WriteLine($"({a}, {b}) -> {a == b}");
         }
     }
 }

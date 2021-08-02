@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FunctionalProgramming\Monad\Monad.csproj" />
+    <ProjectReference Include="..\..\Trash\Trash.csproj" />
   </ItemGroup>
 
 </Project>
