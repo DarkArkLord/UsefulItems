@@ -5,21 +5,23 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C392907E-35D3-4F28-B63A-E0A3CAAA33E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreConsole", "Test\CoreConsole\CoreConsole.csproj", "{7EB48469-F977-41D5-B7EC-13F56DD4B6FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreConsole", "Test\CoreConsole\CoreConsole.csproj", "{7EB48469-F977-41D5-B7EC-13F56DD4B6FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkConsole", "Test\FrameworkConsole\FrameworkConsole.csproj", "{63D6C41B-4F65-4EDC-96E7-AB912CC443C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalProgramming", "FunctionalProgramming", "{4235BEDA-6095-46D2-928F-B7C97440EEAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monad", "FunctionalProgramming\Monad\Monad.csproj", "{ED46FB48-BD3D-4A28-994D-D19F28A1D99A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monad", "FunctionalProgramming\Monad\Monad.csproj", "{ED46FB48-BD3D-4A28-994D-D19F28A1D99A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUtils", "ConsoleUtils\ConsoleUtils.csproj", "{14BF25D5-C410-4579-A87D-0FA629962AB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleUtils", "ConsoleUtils\ConsoleUtils.csproj", "{14BF25D5-C410-4579-A87D-0FA629962AB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationLib", "ValidationLib\ValidationLib.csproj", "{354228D2-DB26-4201-8F08-B7B5BC2C2BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValidationLib", "ValidationLib\ValidationLib.csproj", "{354228D2-DB26-4201-8F08-B7B5BC2C2BDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlUtils", "SqlUtils", "{52F6D36C-F9B9-4655-96AB-E08FF677330D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkORM", "SqlUtils\DarkORM\DarkORM.csproj", "{3CA8E728-921C-47BF-A770-868F2103EAEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DarkORM", "SqlUtils\DarkORM\DarkORM.csproj", "{3CA8E728-921C-47BF-A770-868F2103EAEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trash", "Trash\Trash.csproj", "{3BB3E8EB-E86E-4499-801E-60BE874C8B72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{3CA8E728-921C-47BF-A770-868F2103EAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CA8E728-921C-47BF-A770-868F2103EAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CA8E728-921C-47BF-A770-868F2103EAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BB3E8EB-E86E-4499-801E-60BE874C8B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB3E8EB-E86E-4499-801E-60BE874C8B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB3E8EB-E86E-4499-801E-60BE874C8B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB3E8EB-E86E-4499-801E-60BE874C8B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
