@@ -4,10 +4,6 @@
 @echo off
 
 color A
-echo ^> Remove JetBrains folder from Local
-rd /s /q "C:\Users\%username%\AppData\Local\JetBrains"
-echo .
-
 echo ^> Remove JetBrains folder from Roaming
 rd /s /q "C:\Users\%username%\AppData\Roaming\JetBrains"
 echo .
