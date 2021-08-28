@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FunctionalProgramming\Monad\Monad.csproj" />
+    <ProjectReference Include="..\..\GameElements\DarkGraphicsLib\DarkGraphicsLib.csproj" />
     <ProjectReference Include="..\..\Trash\Trash.csproj" />
   </ItemGroup>
 
