@@ -11,21 +11,25 @@ namespace UsefulItems.CSharp.Test.CoreConsole
         {
             Console.WriteLine("Hello Core!");
 
-            var point = new Vector2(3, 3);
+            var point = new Vector3(10, 10, 10);
             Console.WriteLine(point);
-            point = CentralСoordinateSystemConverter.ConvertToScreen(point, 10, 10);
-            Console.WriteLine(point);
-            point = CentralСoordinateSystemConverter.ConvertToCentral(point, 10, 10);
-            Console.WriteLine(point);
-
             Console.WriteLine();
 
-            point = new Vector2(3, 3);
-            var converter = new CentralСoordinateSystemConverter(10, 10);
-            Console.WriteLine(point);
-            point = converter.ConvertToScreen(point);
-            Console.WriteLine(point);
-            point = converter.ConvertToCentral(point);
+            Console.WriteLine(point.Rotate(new Vector3(0, 0, 0)));
+            Console.WriteLine();
+
+            Console.WriteLine(point.Rotate(new Vector3(Math.PI, 0, 0)));
+            Console.WriteLine(point.Rotate(new Vector3(Math.PI, 0, 0)));
+            Console.WriteLine();
+
+            Console.WriteLine(point.Rotate(new Vector3(0, Math.PI, 0)));
+            Console.WriteLine(point.Rotate(new Vector3(0, Math.PI, 0)));
+            Console.WriteLine();
+
+            Console.WriteLine(point.Rotate(new Vector3(0, 0, Math.PI)));
+            Console.WriteLine(point.Rotate(new Vector3(0, 0, Math.PI)));
+            Console.WriteLine();
+
             Console.WriteLine(point);
 
             Console.WriteLine("\nend");
