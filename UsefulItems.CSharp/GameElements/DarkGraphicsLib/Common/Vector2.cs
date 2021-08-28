@@ -30,19 +30,29 @@ namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common
         #endregion
 
         #region Math
+        public Vector2 Clear() => ((X, Y) = (0, 0), this).Item2;
+
         public Vector2 Negative() => ((X, Y) = (-X, -Y), this).Item2;
 
         public Vector2 Add(Vector2 other) => ((X, Y) = (X + other.X, Y + other.Y), this).Item2;
+
+        public Vector2 Add(double otherX, double otherY) => ((X, Y) = (X + otherX, Y + otherY), this).Item2;
 
         public Vector2 Add(double other) => ((X, Y) = (X + other, Y + other), this).Item2;
 
         public Vector2 Sub(Vector2 other) => ((X, Y) = (X - other.X, Y - other.Y), this).Item2;
 
+        public Vector2 Sub(double otherX, double otherY) => ((X, Y) = (X - otherX, Y - otherY), this).Item2;
+
         public Vector2 Sub(double other) => ((X, Y) = (X - other, Y - other), this).Item2;
 
         public Vector2 Mult(double other) => ((X, Y) = (X * other, Y * other), this).Item2;
 
+        public Vector2 Mult(double otherX, double otherY) => ((X, Y) = (X * otherX, Y * otherY), this).Item2;
+
         public Vector2 Div(double other) => ((X, Y) = (X / other, Y / other), this).Item2;
+
+        public Vector2 Div(double otherX, double otherY) => ((X, Y) = (X / otherX, Y / otherY), this).Item2;
 
         public double Dot(Vector2 other) => X * other.X + Y * other.Y;
         #endregion

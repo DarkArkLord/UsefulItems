@@ -29,19 +29,29 @@ namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common
         #endregion
 
         #region Math
+        public Vector3 Clear() => ((X, Y, Z) = (0, 0, 0), this).Item2;
+
         public Vector3 Negative() => ((X, Y, Z) = (-X, -Y, -Z), this).Item2;
 
         public Vector3 Add(Vector3 other) => ((X, Y, Z) = (X + other.X, Y + other.Y, Z + other.Z), this).Item2;
+
+        public Vector3 Add(double otherX, double otherY, double otherZ) => ((X, Y, Z) = (X + otherX, Y + otherY, Z + otherZ), this).Item2;
 
         public Vector3 Add(double other) => ((X, Y, Z) = (X + other, Y + other, Z + other), this).Item2;
 
         public Vector3 Sub(Vector3 other) => ((X, Y, Z) = (X - other.X, Y - other.Y, Z - other.Z), this).Item2;
 
+        public Vector3 Sub(double otherX, double otherY, double otherZ) => ((X, Y, Z) = (X - otherX, Y - otherY, Z - otherZ), this).Item2;
+
         public Vector3 Sub(double other) => ((X, Y, Z) = (X - other, Y - other, Z - other), this).Item2;
 
         public Vector3 Mult(double other) => ((X, Y, Z) = (X * other, Y * other, Z * other), this).Item2;
 
+        public Vector3 Mult(double otherX, double otherY, double otherZ) => ((X, Y, Z) = (X * otherX, Y * otherY, Z * otherZ), this).Item2;
+
         public Vector3 Div(double other) => ((X, Y, Z) = (X / other, Y / other, Z / other), this).Item2;
+
+        public Vector3 Div(double otherX, double otherY, double otherZ) => ((X, Y, Z) = (X / otherX, Y / otherY, Z / otherZ), this).Item2;
 
         public double Dot(Vector3 other) => X * other.X + Y * other.Y + Z * other.Z;
         #endregion
