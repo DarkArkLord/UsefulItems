@@ -5,4 +5,8 @@
     <RootNamespace>UsefulItems.CSharp.GameElements.DarkGraphicsLib</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="ParticlesSystem2D\Common\" />
+  </ItemGroup>
+
 </Project>

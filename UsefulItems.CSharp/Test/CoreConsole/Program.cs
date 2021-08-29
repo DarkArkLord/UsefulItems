@@ -1,6 +1,5 @@
 ﻿using System;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common;
+using UsefulItems.CSharp.DarkGraphicsLib.CommonElements;
 using UsefulItems.CSharp.Trash.Hacks;
 
 namespace UsefulItems.CSharp.Test.CoreConsole

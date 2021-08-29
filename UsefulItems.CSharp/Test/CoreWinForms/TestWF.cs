@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.ParticlesSystem2D;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.ParticlesSystem2D.Common;
+using UsefulItems.CSharp.DarkGraphicsLib.CommonElements;
+using UsefulItems.CSharp.DarkGraphicsLib.ParticleSystem2D;
+
+using TestStstem = UsefulItems.CSharp.DarkGraphicsLib.ParticleSystem2D.Test;
 
 namespace UsefulItems.CSharp.Test.CoreWinForms
 {
     public partial class TestWF : Form
     {
         private CentralСoordinateSystemConverter converter;
-        private GameElements.DarkGraphicsLib.ParticlesSystem2D.Test testSystem;
+        private TestStstem testSystem;
         private Graphics graphics;
 
         public TestWF()
@@ -21,7 +21,7 @@ namespace UsefulItems.CSharp.Test.CoreWinForms
             converter = new CentralСoordinateSystemConverter(mainDisplay.Width, mainDisplay.Height);
             mainDisplay.Image = new Bitmap(mainDisplay.Width, mainDisplay.Height);
             graphics = Graphics.FromImage(mainDisplay.Image);
-            testSystem = new GameElements.DarkGraphicsLib.ParticlesSystem2D.Test()
+            testSystem = new TestStstem()
             {
                 Converter = converter,
                 DrawParticle = DrawParticle,

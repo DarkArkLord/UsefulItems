@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.ParticlesSystem2D.Common;
+using UsefulItems.CSharp.DarkGraphicsLib.CommonElements;
+using UsefulItems.CSharp.DarkGraphicsLib.ParticleSystem2D.Common;
 
-namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib.ParticlesSystem2D
+namespace UsefulItems.CSharp.DarkGraphicsLib.ParticleSystem2D
 {
     public class Test
     {

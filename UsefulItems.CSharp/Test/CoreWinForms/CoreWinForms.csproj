@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GameElements\DarkGraphicsLib\DarkGraphicsLib.csproj" />
+    <ProjectReference Include="..\..\DarkGraphicsLib\CommonElements\CommonElements.csproj" />
+    <ProjectReference Include="..\..\DarkGraphicsLib\ParticleSystem2D\ParticleSystem2D.csproj" />
   </ItemGroup>
 
 </Project>

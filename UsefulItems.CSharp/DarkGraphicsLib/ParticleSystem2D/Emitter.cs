@@ -1,7 +1,7 @@
 ﻿using System;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common;
+using UsefulItems.CSharp.DarkGraphicsLib.CommonElements;
 
-namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib.ParticlesSystem2D
+namespace UsefulItems.CSharp.DarkGraphicsLib.ParticleSystem2D
 {
     public class Emitter
     {

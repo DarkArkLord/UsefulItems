@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common
+namespace UsefulItems.CSharp.DarkGraphicsLib.CommonElements
 {
     public class Vector3
     {

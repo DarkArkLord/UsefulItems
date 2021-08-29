@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UsefulItems.CSharp.GameElements.DarkGraphicsLib.Common;
-
-namespace UsefulItems.CSharp.GameElements.DarkGraphicsLib
+﻿namespace UsefulItems.CSharp.DarkGraphicsLib.CommonElements
 {
     public class CentralСoordinateSystemConverter
     {
