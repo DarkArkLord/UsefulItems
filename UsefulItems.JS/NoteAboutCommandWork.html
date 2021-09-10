@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Note</title>
+    </head>
+    <body>
+        <div id="myId"></div>
+    </body>
+
+    <script>
+        const NoteTypes = {
+            GOOD: {Id: 1, Title: 'Good', Color: '#0F0'},
+            NEUTRAL: {Id: 2, Title: 'Good', Color: '#FF0'},
+            BAD: {Id: 3, Title: 'Bad', Color: '#F00'},
+        }
+    </script>
+
+    <script>
+        var crude_data = [
+            {
+                Name: 'Денис Колодин',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписался о навыках', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Аналитика', Note: 'Оценил здание', Type: NoteTypes.GOOD},
+                    {Score: -1, Task: 'Общее', Note: 'Внесение негатива', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Общее', Note: 'Забил на задание', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Общее', Note: 'Уехал в неподходящий момент', Type: NoteTypes.BAD},
+                    {Score: -4, Task: 'Общее', Note: 'Просрочил дедлайн x4', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Общее', Note: 'Забил на задание', Type: NoteTypes.BAD},
+                ]
+            },
+            {
+                Name: 'Андрей Котума',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписался о навыках', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Аналитика', Note: 'Оценил здание', Type: NoteTypes.GOOD},
+                    {Score: 0, Task: 'Общее', Note: 'Сделал задание, но слишком плохо', Type: NoteTypes.NEUTRAL},
+                    {Score: -3, Task: 'Общее', Note: 'Просрочил дедлайн x3', Type: NoteTypes.BAD},
+                    {Score: 0, Task: 'Общее', Note: 'Сделал задание, но халтурно', Type: NoteTypes.NEUTRAL},
+                    {Score: -1, Task: 'Общее', Note: 'Сделанное решение даже не собирается', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Общее', Note: 'Забил на доделывание задания', Type: NoteTypes.BAD},
+                ]
+            },
+            {
+                Name: 'Александр Горячкин',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписался о навыках', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Макет UI', Note: 'Помогал с UI', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Макет UI', Note: 'Сделал макет овновного экрана UI', Type: NoteTypes.GOOD},
+
+                ]
+            },
+            {
+                Name: 'Руслан Гаджимурадов',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписался о навыках', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Макет БД', Note: 'Сделал макет', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Добавление БД', Note: 'Сделал сущности', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Добавление БД', Note: 'Запустил базу', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Добавление БД', Note: 'Пофиксил базу', Type: NoteTypes.GOOD},
+                ]
+            },
+            {
+                Name: 'Глеб Роках',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписался о навыках', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Макет БД', Note: 'Сделал макет', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'UI', Note: 'Написал базу страниц меню', Type: NoteTypes.GOOD},
+                    {Score: -1, Task: 'Общее', Note: 'Уехал в неподходящий момент', Type: NoteTypes.BAD},
+                    {Score: 1, Task: 'UI', Note: 'Написал базу страниц парковки', Type: NoteTypes.GOOD},
+                ]
+            },
+            {
+                Name: 'Александра Павлова',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписалась о навыках', Type: NoteTypes.GOOD},
+                    {Score: 0, Task: 'Макет UI', Note: 'Не успела к дедлайну (болезнь)', Type: NoteTypes.NEUTRAL},
+                    {Score: -1, Task: 'Макет UI', Note: 'Не успела к дедлайну', Type: NoteTypes.BAD},
+                    {Score: -2, Task: 'Подготовка', Note: 'Долго игнорировала задание х2', Type: NoteTypes.BAD},
+                    {Score: 1, Task: 'Макет UI', Note: 'Сделала красивые картинки', Type: NoteTypes.GOOD},
+                    {Score: -1, Task: 'Макет UI', Note: 'Забила на задание', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Общее', Note: 'Внесение негатива', Type: NoteTypes.BAD},
+                    {Score: 1, Task: 'Общее', Note: 'Оповещение о происходящих событиях', Type: NoteTypes.GOOD},
+                    {Score: -1, Task: 'Общее', Note: 'Уехала в неподходящий момент', Type: NoteTypes.BAD},
+                ]
+            },
+            {
+                Name: 'Вика Соседова',
+                Notes: [
+                    {Score: 1, Task: 'Подготовка', Note: 'Быстро отписалась о навыках', Type: NoteTypes.GOOD},
+                    {Score: -2, Task: 'Макет UI', Note: 'Не успела к дедлайну х2', Type: NoteTypes.BAD},
+                    {Score: -1, Task: 'Подготовка', Note: 'Долго игнорировала задание', Type: NoteTypes.BAD},
+                    {Score: 1, Task: 'Макет UI', Note: 'Сделала макет UI', Type: NoteTypes.GOOD},
+                    {Score: 1, Task: 'Макет UI', Note: 'Помогала сделать макет овновного экрана UI', Type: NoteTypes.GOOD},
+                ]
+            },
+        ]
+    </script>
+
+    <script>
+        function Counter(init = 0, step = 1) {
+                var counter = init;
+                this.Current = () => counter;
+                this.Next = () => counter += step;
+            }
+    </script>
+
+    <script>
+        function List() {
+            var counter = new Counter();
+            var content = [];
+
+            this.Add = function(item) {
+                var temp = {}
+                for(var key in item) {
+                    temp[key] = item[key];
+                }
+
+                temp.Id = counter.Next();
+
+                content.push(temp);
+            }
+            this.GetAll = () => content;
+        }
+    </script>
+
+    <script>
+        function NotesList() {
+            var list = new List();
+
+            this.Add = list.Add;
+            this.GetAll = list.GetAll;
+            this.GetScore = () => list.GetAll().reduce(((acc, cur) => acc + cur.Score), 0);
+        }
+    </script>
+
+    <script>
+        function UsersList() {
+            var list = new List();
+
+            this.Add = (name) => list.Add({
+                Name: name, 
+                Notes: new NotesList()
+            });
+            this.GetAll = list.GetAll;
+            this.Last = () => list.GetAll()[list.GetAll().length - 1];
+        }
+    </script>
+
+    <script>
+        var users_list = new UsersList();
+        crude_data.forEach(user => {
+            users_list.Add(user.Name);
+            var notes = users_list.Last().Notes;
+            user.Notes.forEach(notes.Add);
+        });
+    </script>
+
+    <script>
+        function Table() {
+            var result = document.createElement('table');
+            result.setAttribute('border', 1);
+            result.setAttribute('width', '100%');
+
+            this.Get = () => result;
+            this.Add = function(record, attrs = [], style = []) {
+                var line = document.createElement('tr');
+
+                attrs.forEach(attr => {
+                    line.setAttribute(attr.Name, attr.Value);
+                });
+
+                if(style.length > 0) {
+                    var style_string = '';
+                    style.forEach(element => {
+                        style_string += element.Name + ': ' + element.Value + ';';
+                    });
+                    line.setAttribute('style', style_string);
+                }
+
+                record.forEach(element => {
+                    var item =  document.createElement('td');
+                    item.setAttribute('align', 'center');
+                    item.append(element);
+                    line.append(item);
+                });
+
+                result.append(line)
+            }
+        }
+    </script>
+
+    <script>
+        function NotesTable() {
+            var table = new Table();
+
+            this.Add = table.Add;
+            this.AddNote = function(record, type) {
+                table.Add(record, [], [
+                    {Name: 'color', Value: type.Color},
+                    {Name: 'background-color', Value: '#555;'},
+                ]);
+            }
+            this.Get = function() {
+                var result = document.createElement('div');
+
+                var values = table.Get();
+                values.style.display = 'none';
+                var visible = false;
+
+                var button = document.createElement('button');
+                button.innerHTML = 'Toggle';
+                button.onclick = function() 
+                {
+                    if(visible) {
+                        values.style.display = 'none';
+                    } else {
+                        values.style.display = '';
+                    }
+                    visible = !visible;
+                }
+
+                result.append(button);
+                result.append(values);
+
+                return result;
+            }
+        }
+    </script>
+
+    <script>
+        var table = new Table();
+        table.Add(['Id', 'Name', 'Score', 'Notes'])
+
+        users_list.GetAll().forEach(user => {
+            var user_notes = new NotesTable();
+            user_notes.Add(['Id', 'Score', 'Task', 'Note']);
+            user.Notes.GetAll().forEach(note => {
+                user_notes.AddNote([note.Id, note.Score, note.Task, note.Note], note.Type);
+            });
+            table.Add([user.Id, user.Name, user.Notes.GetScore(), user_notes.Get()]);
+        });
+
+        document.getElementById("myId").append(table.Get());
+    </script>
+</html>
