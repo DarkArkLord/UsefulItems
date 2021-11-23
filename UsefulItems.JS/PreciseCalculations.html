@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Precise Calculations</title>
+</head>
+
+<body>
+    <textarea id="output" readonly rows="30" cols="120"></textarea>
+</body>
+<!-- preciseCalculations -->
+<script>
+    function PreciseCalculations(numerator, denominator) {
+        this.numerator = numerator;
+        this.denominator = denominator;
+    }
+    PreciseCalculations.prototype = {
+        toString() {
+            return `(${this.numerator} / ${this.denominator})`;
+        },
+        valueOf() {
+            return this.numerator / this.denominator;
+        },
+        copy() {
+            return new PreciseCalculations(this.numerator, this.denominator);
+        },
+        simplify() {
+            const stop = Math.sqrt(this.numerator > this.denominator
+                ? this.numerator
+                : this.denominator) + 1;
+            for (let i = 2; i < stop; i++) {
+                while (this.numerator % i == 0 && this.denominator % i == 0) {
+                    this.numerator /= i;
+                    this.denominator /= i;
+                }
+            }
+            return this;
+        },
+        simplifyCopy() {
+            return this.copy().simplify();
+        },
+        add(other) {
+            if (this.denominator == other.denominator) {
+                let numerator = this.numerator + other.numerator;
+                return new PreciseCalculations(numerator, this.denominator);
+            }
+            let num1 = this.numerator * other.denominator;
+            let num2 = other.numerator * this.denominator;
+            let den = this.denominator * other.denominator;
+            return new PreciseCalculations(num1 + num2, den);
+        },
+        negative() {
+            return new PreciseCalculations(-this.numerator, this.denominator);
+        },
+        sub(other) {
+            return this.add(other.negative());
+        },
+        mul(other) {
+            let num = this.numerator * other.numerator;
+            let den = this.denominator * other.denominator;
+            return new PreciseCalculations(num, den);
+        },
+        reverse() {
+            return new PreciseCalculations(this.denominator, this.numerator);
+        },
+        div(other) {
+            return this.mul(other.reverse());
+        }
+    };
+    PreciseCalculations.fromNumber = (number) => {
+        if (Number.isInteger(number)) {
+            return new PreciseCalculations(number, 1);
+        }
+        let numbersCount = number.toString().split('.').pop().length;
+        let denominator = 10 ** numbersCount;
+        let result = new PreciseCalculations(number * denominator, denominator);
+        return result;//.simplify();
+    };
+</script>
+<!-- test -->
+<script>
+    const out = document.getElementById('output');
+    out.value = '';
+    function pushOut(text) {
+        out.value += text + '\n';
+    }
+    function PCtoText(val) {
+        return `${val.toString()} => ${val.valueOf()}`;
+    }
+    function pushPC(val) {
+        pushOut(PCtoText(val));
+    }
+
+    // --- Main ---
+    // let t = new PreciseCalculations(2, 4);
+    // pushPC(t);
+    // let t2 = t.simplifyCopy();
+    // pushPC(t2);
+    // pushPC(t);
+    // t = PreciseCalculations.fromNumber(5);
+    // pushPC(t);
+    // t = PreciseCalculations.fromNumber(1.2345);
+    // pushPC(t);
+    // t = PreciseCalculations.fromNumber(1.2345).simplify();
+    // pushPC(t);
+    // t = PreciseCalculations.fromNumber(Math.PI);
+    // pushPC(t);
+
+    // --- Math ---
+    // let a = PreciseCalculations.fromNumber(4);
+    // let b = PreciseCalculations.fromNumber(2);
+    // pushPC(a.add(b));
+    // pushPC(a.negative());
+    // pushPC(a.sub(b));
+    // pushPC(a.mul(b));
+    // pushPC(a.reverse());
+    // pushPC(a.div(b));
+    // pushPC(a.div(b).simplify());
+
+    // let t = PreciseCalculations.fromNumber(Math.PI);
+    // pushOut(Math.PI);
+    // pushPC(t);
+    // pushOut(Math.PI + Math.PI + Math.PI + Math.PI);
+    // t = t.add(t).add(t).add(t);
+    // pushPC(t);
+    // pushPC(t.simplifyCopy());
+
+    // --- a ---
+    let sum = 360;
+    pushOut(`sum: ${sum}`);
+    let partsCount = 29;
+    pushOut(`partsCount: ${partsCount}`);
+
+    pushOut('--- float ---');
+    let part = sum / partsCount;
+    pushOut(`part: ${part}`);
+    let newSum = 0;
+    for(let i = 0; i < partsCount; i++) {
+        newSum += part;
+    }
+    pushOut(`newSum: ${newSum}`);
+    
+    pushOut('--- float round 2 ---');
+    part = parseFloat((sum / partsCount).toFixed(2));
+    pushOut(`part: ${part}`);
+    newSum = 0;
+    for(let i = 0; i < partsCount; i++) {
+        newSum = parseFloat((newSum + part).toFixed(2));
+    }
+    pushOut(`newSum: ${newSum}`);
+    
+    pushOut('--- pc ---');
+    part = new PreciseCalculations(sum, partsCount);
+    pushOut(`part: ${PCtoText(part)}`);
+    newSum = PreciseCalculations.fromNumber(0);
+    for(let i = 0; i < partsCount; i++) {
+        newSum = newSum.add(part);
+    }
+    pushOut(`newSum: ${PCtoText(newSum)}`);
+
+
+</script>
+
+</html>
