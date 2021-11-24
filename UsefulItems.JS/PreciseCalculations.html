@@ -101,6 +101,11 @@
         let result = new PreciseCalculations(sign * numberAbs * denominator, denominator);
         return result;
     };
+
+    PreciseCalculations.fromObject = (obj) => {
+        let result = new PreciseCalculations(obj.numerator, obj.denominator);
+        return result;
+    };
 </script>
 <!-- test -->
 <script>
