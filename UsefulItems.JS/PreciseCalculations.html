@@ -14,6 +14,7 @@
         this.numerator = numerator;
         this.denominator = denominator;
     }
+
     PreciseCalculations.prototype = {
         toString() {
             return `(${this.numerator} / ${this.denominator})`;
@@ -44,6 +45,12 @@
         simplifyCopy() {
             return this.copy().simplify();
         },
+        reverse() {
+            return new PreciseCalculations(this.denominator, this.numerator);
+        },
+        negative() {
+            return new PreciseCalculations(-this.numerator, this.denominator);
+        },
         add(other) {
             if (this.denominator == other.denominator) {
                 let numerator = this.numerator + other.numerator;
@@ -54,24 +61,19 @@
             let den = this.denominator * other.denominator;
             return new PreciseCalculations(num1 + num2, den);
         },
-        negative() {
-            return new PreciseCalculations(-this.numerator, this.denominator);
-        },
         sub(other) {
-            return this.add(other.negative());
+            return this.add(other.copy().negative());
         },
         mul(other) {
             let num = this.numerator * other.numerator;
             let den = this.denominator * other.denominator;
             return new PreciseCalculations(num, den);
         },
-        reverse() {
-            return new PreciseCalculations(this.denominator, this.numerator);
-        },
         div(other) {
-            return this.mul(other.reverse());
+            return this.mul(other.copy().reverse());
         }
     };
+
     PreciseCalculations.fromNumber = (number) => {
         if (Number.isInteger(number)) {
             return new PreciseCalculations(number, 1);
