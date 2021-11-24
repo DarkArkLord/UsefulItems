@@ -71,6 +71,22 @@
         },
         div(other) {
             return this.mul(other.copy().reverse());
+        },
+        addNumber(other) {
+            let otherFraction = PreciseCalculations.fromNumber(other);
+            return this.add(otherFraction);
+        },
+        subNumber(other) {
+            let otherFraction = PreciseCalculations.fromNumber(other);
+            return this.sub(otherFraction);
+        },
+        mulNumber(other) {
+            let otherFraction = PreciseCalculations.fromNumber(other);
+            return this.mul(otherFraction);
+        },
+        divNumber(other) {
+            let otherFraction = PreciseCalculations.fromNumber(other);
+            return this.div(otherFraction);
         }
     };
 
@@ -159,7 +175,7 @@
     pushOut(`newSum: ${newSum}`);
 
     pushOut('--- pc ---');
-    part = new PreciseCalculations(sum, partsCount);
+    part = PreciseCalculations.fromNumber(sum).divNumber(partsCount);
     pushOut(`part: ${PCtoText(part)}`);
     newSum = PreciseCalculations.fromNumber(0);
     for (let i = 0; i < partsCount; i++) {
