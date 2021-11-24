@@ -24,16 +24,21 @@
         copy() {
             return new PreciseCalculations(this.numerator, this.denominator);
         },
+        sign() {
+            return Math.sign(this.valueOf());
+        },
         simplify() {
-            const stop = Math.sqrt(this.numerator > this.denominator
-                ? this.numerator
-                : this.denominator) + 1;
+            let num = Math.abs(this.numerator);
+            let den = Math.abs(this.denominator);
+            const stop = Math.sqrt(num > den ? num : den) + 1;
             for (let i = 2; i < stop; i++) {
-                while (this.numerator % i == 0 && this.denominator % i == 0) {
-                    this.numerator /= i;
-                    this.denominator /= i;
+                while (num % i == 0 && den % i == 0) {
+                    num /= i;
+                    den /= i;
                 }
             }
+            this.numerator = num * this.sign();
+            this.denominator = den;
             return this;
         },
         simplifyCopy() {
@@ -71,10 +76,12 @@
         if (Number.isInteger(number)) {
             return new PreciseCalculations(number, 1);
         }
-        let numbersCount = number.toString().split('.').pop().length;
+        let sign = Math.sign(number);
+        let numberAbs = Math.abs(number);
+        let numbersCount = numberAbs.toString().split('.').pop().length;
         let denominator = 10 ** numbersCount;
-        let result = new PreciseCalculations(number * denominator, denominator);
-        return result;//.simplify();
+        let result = new PreciseCalculations(sign * numberAbs * denominator, denominator);
+        return result;
     };
 </script>
 <!-- test -->
@@ -135,25 +142,25 @@
     let part = sum / partsCount;
     pushOut(`part: ${part}`);
     let newSum = 0;
-    for(let i = 0; i < partsCount; i++) {
+    for (let i = 0; i < partsCount; i++) {
         newSum += part;
     }
     pushOut(`newSum: ${newSum}`);
-    
+
     pushOut('--- float round 2 ---');
     part = parseFloat((sum / partsCount).toFixed(2));
     pushOut(`part: ${part}`);
     newSum = 0;
-    for(let i = 0; i < partsCount; i++) {
+    for (let i = 0; i < partsCount; i++) {
         newSum = parseFloat((newSum + part).toFixed(2));
     }
     pushOut(`newSum: ${newSum}`);
-    
+
     pushOut('--- pc ---');
     part = new PreciseCalculations(sum, partsCount);
     pushOut(`part: ${PCtoText(part)}`);
     newSum = PreciseCalculations.fromNumber(0);
-    for(let i = 0; i < partsCount; i++) {
+    for (let i = 0; i < partsCount; i++) {
         newSum = newSum.add(part);
     }
     pushOut(`newSum: ${PCtoText(newSum)}`);
