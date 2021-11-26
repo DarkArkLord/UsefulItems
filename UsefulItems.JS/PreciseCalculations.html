@@ -22,6 +22,9 @@
         valueOf() {
             return this.numerator / this.denominator;
         },
+        round(n) {
+            return +this.valueOf().toFixed(n);
+        },
         copy() {
             return new PreciseCalculations(this.numerator, this.denominator);
         },
@@ -115,7 +118,7 @@
         out.value += text + '\n';
     }
     function PCtoText(val) {
-        return `${val.toString()} => ${val.valueOf()}`;
+        return `${val.toString()} => ${val.valueOf()} => ${val.round(2)}`;
     }
     function pushPC(val) {
         pushOut(PCtoText(val));
