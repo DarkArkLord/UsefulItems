@@ -16,6 +16,7 @@
     }
 
     PreciseCalculations.prototype = {
+        // Get value
         toString() {
             return `(${this.numerator} / ${this.denominator})`;
         },
@@ -25,12 +26,14 @@
         round(n) {
             return +this.valueOf().toFixed(n);
         },
-        copy() {
-            return new PreciseCalculations(this.numerator, this.denominator);
-        },
         sign() {
             return Math.sign(this.valueOf());
         },
+        // Copy
+        copy() {
+            return new PreciseCalculations(this.numerator, this.denominator);
+        },
+        // Simplify
         simplify() {
             let num = Math.abs(this.numerator);
             let den = Math.abs(this.denominator);
@@ -48,6 +51,7 @@
         simplifyCopy() {
             return this.copy().simplify();
         },
+        // Math
         reverse() {
             return new PreciseCalculations(this.denominator, this.numerator);
         },
@@ -75,6 +79,7 @@
         div(other) {
             return this.mul(other.copy().reverse());
         },
+        // Number math
         addNumber(other) {
             let otherFraction = PreciseCalculations.fromNumber(other);
             return this.add(otherFraction);
