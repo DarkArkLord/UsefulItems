@@ -90,6 +90,13 @@
         divNumber(other) {
             let otherFraction = PreciseCalculations.fromNumber(other);
             return this.div(otherFraction);
+        },
+        // Compare
+        equals(other) {
+            let a = this.simplifyCopy();
+            let b = other.simplifyCopy();
+            return a.numerator == b.numerator
+                && a.denominator == b.denominator;
         }
     };
 
