@@ -11,8 +11,8 @@
 <!-- preciseCalculations -->
 <script>
     function PreciseCalculations(numerator, denominator) {
-        this.numerator = numerator;
-        this.denominator = denominator;
+        this.numerator = numerator || 0;
+        this.denominator = denominator || 1;
     }
 
     PreciseCalculations.prototype = {
@@ -35,14 +35,23 @@
         },
         // Simplify
         simplify() {
+            function findGreatestCommonDivisor(a, b) {
+                let t;
+                while (b > 0) {
+                    t = a % b;
+                    a = b;
+                    b = t;
+                }
+                return a;
+            }
+
             let num = Math.abs(this.numerator);
             let den = Math.abs(this.denominator);
-            const stop = Math.sqrt(num > den ? num : den) + 1;
-            for (let i = 2; i < stop; i++) {
-                while (num % i == 0 && den % i == 0) {
-                    num /= i;
-                    den /= i;
-                }
+            let gcd = findGreatestCommonDivisor(num, den);
+            while (gcd > 1) {
+                num /= gcd;
+                den /= gcd;
+                gcd = findGreatestCommonDivisor(num, den);
             }
             this.numerator = num * this.sign();
             this.denominator = den;
@@ -105,22 +114,33 @@
         }
     };
 
-    PreciseCalculations.fromNumber = (number) => {
+    PreciseCalculations.fromNumber = (number, accuracy = 6) => {
+        if (!number || Number.isNaN(number)) {
+            return PreciseCalculations.zero();
+        }
         if (Number.isInteger(number)) {
             return new PreciseCalculations(number, 1);
         }
         let sign = Math.sign(number);
         let numberAbs = Math.abs(number);
         let numbersCount = numberAbs.toString().split('.').pop().length;
+        if (numbersCount > accuracy) {
+            numbersCount = accuracy;
+        }
         let denominator = 10 ** numbersCount;
-        let result = new PreciseCalculations(sign * numberAbs * denominator, denominator);
+        let numerator = sign * Math.round(numberAbs * denominator);
+        let result = new PreciseCalculations(numerator, denominator);
         return result;
     };
 
     PreciseCalculations.fromObject = (obj) => {
-        let result = new PreciseCalculations(obj.numerator, obj.denominator);
+        let num = getValue(obj, 'numerator', 0);
+        let den = getValue(obj, 'denominator', 1);
+        let result = new PreciseCalculations(num, den);
         return result;
     };
+
+    PreciseCalculations.zero = () => new PreciseCalculations(0, 1);
 </script>
 <!-- test -->
 <script>
