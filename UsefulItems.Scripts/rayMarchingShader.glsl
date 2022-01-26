@@ -3,12 +3,45 @@ const int MAX_STEPS = 256;
 const float MAX_DIST = 500.0;
 const float EPSILON = 0.001;
 
+/***************
+ * hg_sdf.glsl *
+ ***************
+ *    START    *
+ ***************/
+
+float fSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+float fPlane(vec3 p, vec3 n, float distanceFromOrigin) {
+	return dot(p, n) + distanceFromOrigin;
+}
+
+vec3 pMod3(inout vec3 p, vec3 size) {
+	vec3 c = floor((p + size*0.5)/size);
+	p = mod(p + size*0.5, size) - size*0.5;
+	return c;
+}
+
+/***************
+ *     END     *
+ ***************/
+
+vec2 fOpUniouId(vec2 a, vec2 b) {
+    return a.x < b.x ? a : b;
+}
+
 vec2 map(vec3 p) {
-    float sphereDist = length(p) - 1.0;
+    // plane
+    float planeDist = fPlane(p, vec3(0, 1, 0), 1.0);
+    float planeId = 2.0;
+    vec2 plane = vec2(planeDist, planeId);
+    // sphere
+    float sphereDist = fSphere(p, 1.0);
     float sphereId = 1.0;
     vec2 sphere = vec2(sphereDist, sphereId);
-
-    vec2 res = sphere;
+    // result
+    vec2 res = fOpUniouId(sphere, plane);
     return res;
 }
 
