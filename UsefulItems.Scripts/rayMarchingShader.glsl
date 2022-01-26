@@ -71,6 +71,11 @@ vec3 getLight(vec3 p, vec3 rd, vec3 color) {
     vec3 N = getNormal(p);
 
     vec3 diffuse = color * clamp(dot(L, N), 0.0, 1.0);
+
+    // shadows
+    float d = rayMarch(p + N * 0.02, normalize(lightPos)).x;
+    if (d < length(lightPos - p)) return vec3(0);
+
     return diffuse;
 }
 
