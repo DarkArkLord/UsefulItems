@@ -83,10 +83,10 @@ vec3 getMaterial(vec3 p, float id) {
     vec3 m;
     switch (int(id)) {
         case 1:
-        m = vec3(0.9, 0.9, 0.0); 
+        m = vec3(0.9, 0.0, 0.0); 
         break;
         case 2:
-        m = vec3(0.0, 0.5, 0.5); 
+        m = vec3(0.2 + 0.4 * mod(floor(p.x) + floor(p.z), 2.0)); 
         break;
     }
     return m;
