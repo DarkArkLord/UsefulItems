@@ -102,8 +102,10 @@ void render(inout vec3 col, in vec2 uv) {
         vec3 p = ro + object.x * rd;
         vec3 material = getMaterial(p, object.y);
         col += getLight(p, rd, material);
+        // fog
+        col = mix(col, background, 1.0 - exp(-0.00002 * object.x * object.x));
     } else {
-        col += background;
+        col += background - max(0.9 * rd.y, 0.0);
     }
 }
 
