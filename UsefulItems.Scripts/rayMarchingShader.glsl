@@ -35,6 +35,11 @@ void pR(inout vec2 p, float a) {
  *     END     *
  ***************/
 
+float fDisplace(vec3 p) {
+    pR(p.yz, sin(2.0 * iTime));
+    return (sin(p.x + 4.0 * iTime) * sin(p.y + sin(2.0 * iTime)) * sin(p.z + 6.0 * iTime));
+}
+
 vec2 fOpUniouId(vec2 a, vec2 b) {
     return a.x < b.x ? a : b;
 }
@@ -45,7 +50,9 @@ vec2 map(vec3 p) {
     float planeId = 2.0;
     vec2 plane = vec2(planeDist, planeId);
     // sphere
-    float sphereDist = fSphere(p, 1.0);
+    vec3 t = vec3(p);
+    t.y -= 10.0;
+    float sphereDist = fSphere(t, 10.0 + fDisplace(p));
     float sphereId = 1.0;
     vec2 sphere = vec2(sphereDist, sphereId);
     // result
@@ -120,9 +127,9 @@ void mouseControl(inout vec3 ro) {
 }
 
 void render(inout vec3 col, in vec2 uv) {
-    vec3 ro = vec3(3.0, 3.0, -3.0);
+    vec3 ro = vec3(20.0, 20.0, -20.0);
     mouseControl(ro);
-    vec3 lookAt = vec3(0.0, 0.0, 0.0);
+    vec3 lookAt = vec3(0.0, 10.0, 0.0);
     vec3 rd = getCam(ro, lookAt) * normalize(vec3(uv, FOV));
 
     vec2 object = rayMarch(ro, rd);
