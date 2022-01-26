@@ -69,14 +69,20 @@ vec3 getLight(vec3 p, vec3 rd, vec3 color) {
     vec3 lightPos = vec3(20.0, 40.0, -30.0);
     vec3 L = normalize(lightPos - p);
     vec3 N = getNormal(p);
+    vec3 V = -rd;
+    vec3 R = reflect(-L, N);
 
+    vec3 specColor = vec3(0.5);
+    vec3 specular = specColor * pow(clamp(dot(R, V), 0.0, 1.0), 10.0);
     vec3 diffuse = color * clamp(dot(L, N), 0.0, 1.0);
+    vec3 ambient = color * 0.05;
+    vec3 fresnel = 0.25 * color * pow(1.0 + dot(rd, N), 3.0);
 
     // shadows
     float d = rayMarch(p + N * 0.02, normalize(lightPos)).x;
-    if (d < length(lightPos - p)) return vec3(0);
+    if (d < length(lightPos - p)) return ambient;
 
-    return diffuse;
+    return diffuse + ambient + specular;
 }
 
 vec3 getMaterial(vec3 p, float id) {
