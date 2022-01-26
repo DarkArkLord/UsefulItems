@@ -98,10 +98,18 @@ vec3 getMaterial(vec3 p, float id) {
     return m;
 }
 
+mat3 getCam(vec3 ro, vec3 lookAt) {
+    vec3 camF = normalize(vec3(lookAt - ro));
+    vec3 camR = normalize(cross(vec3(0, 1, 0), camF));
+    vec3 camU = cross(camF, camR);
+    return mat3(camR, camU, camF);
+}
+
 void render(inout vec3 col, in vec2 uv) {
-    vec3 ro = vec3(0.0, 0.0, -3.0);
-    vec3 rd = normalize(vec3(uv, FOV));
-    
+    vec3 ro = vec3(3.0, 3.0, -3.0);
+    vec3 lookAt = vec3(0.0, 0.0, 0.0);
+    vec3 rd = getCam(ro, lookAt) * normalize(vec3(uv, FOV));
+
     vec2 object = rayMarch(ro, rd);
     vec3 background = vec3(0.5, 0.8, 0.9);
     if(object.x < MAX_DIST) {
