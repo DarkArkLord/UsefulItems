@@ -106,7 +106,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     vec3 col;
     render(col, uv);
-    
+
+    // gamma correction
+    col = pow(col, vec3(0.4545));
     // Output to screen
     fragColor = vec4(col,1.0);
 }
