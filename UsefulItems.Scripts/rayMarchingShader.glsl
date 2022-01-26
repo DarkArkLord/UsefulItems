@@ -9,8 +9,12 @@ const float EPSILON = 0.001;
  *    START    *
  ***************/
 
+const float PI = 3.14159265;
+const float TAU = 2.0 * PI;
+const float PHI = 2.23606797 * 0.5 + 0.5; // sqrt(5) * 0.5 + 0.5;
+
 float fSphere(vec3 p, float r) {
-    return length(p) - r;
+	return length(p) - r;
 }
 
 float fPlane(vec3 p, vec3 n, float distanceFromOrigin) {
@@ -21,6 +25,10 @@ vec3 pMod3(inout vec3 p, vec3 size) {
 	vec3 c = floor((p + size*0.5)/size);
 	p = mod(p + size*0.5, size) - size*0.5;
 	return c;
+}
+
+void pR(inout vec2 p, float a) {
+	p = cos(a)*p + sin(a)*vec2(p.y, -p.x);
 }
 
 /***************
@@ -105,8 +113,15 @@ mat3 getCam(vec3 ro, vec3 lookAt) {
     return mat3(camR, camU, camF);
 }
 
+void mouseControl(inout vec3 ro) {
+    vec2 m = iMouse.xy / iResolution.xy;
+    pR(ro.yz, m.y * PI * 0.4 - 0.4);
+    pR(ro.xz, m.x * TAU);
+}
+
 void render(inout vec3 col, in vec2 uv) {
     vec3 ro = vec3(3.0, 3.0, -3.0);
+    mouseControl(ro);
     vec3 lookAt = vec3(0.0, 0.0, 0.0);
     vec3 rd = getCam(ro, lookAt) * normalize(vec3(uv, FOV));
 
