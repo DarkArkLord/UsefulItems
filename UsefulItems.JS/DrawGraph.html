@@ -10,6 +10,7 @@
 </body>
 
 <script>
+    /* TEST VALUES */
     const testGenerators = {
         values1: () => {
             let res = [];
@@ -78,7 +79,7 @@
         },
     };
 
-    // Постройка элементов
+    /* SVG ELEMENT RENDER */
     const SVGTags = {
         SVG: 'svg',
         Group: 'g',
@@ -113,6 +114,7 @@
         return element;
     }
 
+    /* MAIN IMAGE GENERATING FUNCTION */
     function generateSVG(imageConfig = imageTestConfig, graphConfig = graphTestConfig) {
         const imageElement = { tag: SVGTags.SVG, attributes: {}, childs: [] };
 
@@ -131,18 +133,14 @@
             graphConfig.lines.forEach(funcResult => {
                 funcResult.values.forEach(value => {
                     if (value.x < h.min) {
-                        h.min = value.x;
-                        h.size = h.max - h.min;
+                        h.min = value.x; h.size = h.max - h.min;
                     } else if (value.x > h.max) {
-                        h.max = value.x;
-                        h.size = h.max - h.min;
+                        h.max = value.x; h.size = h.max - h.min;
                     }
                     if (value.y < v.min) {
-                        v.min = value.y;
-                        v.size = v.max - v.min;
+                        v.min = value.y; v.size = v.max - v.min;
                     } else if (value.y > v.max) {
-                        v.max = value.y;
-                        v.size = v.max - v.min;
+                        v.max = value.y; v.size = v.max - v.min;
                     }
                     // let horizontalOffset = value.y.toFixed(2).length * imageConfig.textSize.width + imageConfig.size.client.width + 30;
                     // if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
@@ -165,6 +163,7 @@
             imageElement.childs.push(borderElement);
         })(imageConfig.size.full);
 
+        // Конвертирование координат
         function convertCoords(x, y) {
             const offset = 5;
             return { x: x + (imageConfig.size.full.width - imageConfig.size.client.width) - offset, y: imageConfig.size.client.height - y + offset };
@@ -190,6 +189,7 @@
             imageElement.childs.push(scalesElement);
         })(imageConfig.size.client);
 
+        // Скалирование координат
         function scaleCoords(x, y, sourceSize, resultSize) {
             return {
                 x: (((x - sourceSize.horizontal.min) / sourceSize.horizontal.size) * resultSize.horizontal.size) + resultSize.horizontal.min,
@@ -240,7 +240,6 @@
 
         // Линия функции
         (function () {
-
             graphConfig.lines.forEach(funcResult => {
                 let points = funcResult.values.map(value => scaleCoords(value.x, value.y, scales.func, scales.image));
                 points = points.map(value => convertCoords(value.x, value.y));
@@ -254,9 +253,6 @@
                 };
                 imageElement.childs.push(funcLineElement);
             });
-
-
-
         })();
 
         renderSVG(imageElement);
