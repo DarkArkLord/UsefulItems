@@ -10,6 +10,74 @@
 </body>
 
 <script>
+    const testGenerators = {
+        values1: () => {
+            let res = [];
+            for (let i = 0; i < 10; i++) {
+                res.push({ x: i, y: (i % 2 == 0 ? 1 : -1) * i });
+            }
+            res.push({ x: 9.5, y: 0 });
+            return res;
+        },
+        values2: () => {
+            let res = [];
+            for (let i = 0; i < 10; i++) {
+                res.push({ x: i, y: (i % 2 == 0 ? -1 : 1) * i });
+            }
+            res.push({ x: 9.5, y: 0 });
+            return res;
+        },
+        values3: () => {
+            let res = [];
+            for (let i = 0; i < 10; i++) {
+                res.push({ x: i, y: 0.5 });
+                res.push({ x: i + 0.5, y: -0.5 });
+            }
+            return res;
+        },
+        values4: () => {
+            let res = [];
+            for (let i = 0; i < 10; i++) {
+                res.push({ x: i, y: -0.5 });
+                res.push({ x: i + 0.5, y: 0.5 });
+            }
+            return res;
+        },
+    };
+
+    const imageTestConfig = {
+        size: { full: { height: 700, width: 900, }, client: { height: 600, width: 800, }, },
+        textSize: { width: 9.6, height: 18 }
+    };
+
+    const graphTestConfig = {
+        scales: { xDivisions: 10, yDivisions: 10 },
+        lines: [
+            {
+                values: testGenerators.values1(),
+                color: 'rgb(255, 0, 0)'
+            },
+            {
+                values: testGenerators.values2(),
+                color: 'rgb(0, 255, 0)'
+            },
+            {
+                values: testGenerators.values3(),
+                color: 'rgb(0, 0, 255)'
+            },
+            {
+                values: testGenerators.values4(),
+                color: 'rgb(0, 0, 255)'
+            },
+        ],
+        colors: {
+            imageBorder: 'black',
+            scales: 'rgb(27, 27, 27)',
+            scaleGrid: 'gray',
+            text: 'black',
+        },
+    };
+
     // Постройка элементов
     const SVGTags = {
         SVG: 'svg',
@@ -44,75 +112,6 @@
         }
         return element;
     }
-
-    function generateValues1() {
-        let res = [];
-        for (let i = 0; i < 10; i++) {
-            res.push({ x: i, y: (i % 2 == 0 ? 1 : -1) * i });
-        }
-        res.push({ x: 9.5, y: 0 });
-        return res;
-    }
-
-    function generateValues2() {
-        let res = [];
-        for (let i = 0; i < 10; i++) {
-            res.push({ x: i, y: (i % 2 == 0 ? -1 : 1) * i });
-        }
-        res.push({ x: 9.5, y: 0 });
-        return res;
-    }
-
-    function generateValues3() {
-        let res = [];
-        for (let i = 0; i < 10; i++) {
-            res.push({ x: i, y: 0.5 });
-            res.push({ x: i + 0.5, y: -0.5 });
-        }
-        return res;
-    }
-
-    function generateValues4() {
-        let res = [];
-        for (let i = 0; i < 10; i++) {
-            res.push({ x: i, y: -0.5 });
-            res.push({ x: i + 0.5, y: 0.5 });
-        }
-        return res;
-    }
-
-    const imageTestConfig = {
-        size: { full: { height: 700, width: 900, }, client: { height: 600, width: 800, }, },
-        textSize: { width: 9.6, height: 18 }
-    };
-
-    const graphTestConfig = {
-        scales: { xDivisions: 10, yDivisions: 10 },
-        lines: [
-            {
-                values: generateValues1(),
-                color: 'rgb(255, 0, 0)'
-            },
-            {
-                values: generateValues2(),
-                color: 'rgb(0, 255, 0)'
-            },
-            {
-                values: generateValues3(),
-                color: 'rgb(0, 0, 255)'
-            },
-            {
-                values: generateValues4(),
-                color: 'rgb(0, 0, 255)'
-            },
-        ],
-        colors: {
-            imageBorder: 'black',
-            scales: 'rgb(27, 27, 27)',
-            scaleGrid: 'gray',
-            text: 'black',
-        },
-    };
 
     function generateSVG(imageConfig = imageTestConfig, graphConfig = graphTestConfig) {
         const imageElement = { tag: SVGTags.SVG, attributes: {}, childs: [] };
