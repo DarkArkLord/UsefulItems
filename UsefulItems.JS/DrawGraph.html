@@ -145,7 +145,7 @@
                     }
                     if (imageConfig.updateSize) {
                         let horizontalOffset = value.y.toFixed(2).length * imageConfig.textSize.width + imageConfig.size.client.width + 30;
-                        if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
+                        if (horizontalOffset > imageConfig.size.full.width) { imageConfig.size.full.width = horizontalOffset; }
                     }
                 });
             });
