@@ -48,7 +48,8 @@
 
     const imageTestConfig = {
         size: { full: { height: 700, width: 900, }, client: { height: 600, width: 800, }, },
-        textSize: { width: 9.6, height: 18 }
+        textSize: { width: 9.6, height: 18 },
+        updateSize: true,
     };
 
     const graphTestConfig = {
@@ -142,8 +143,10 @@
                     } else if (value.y > v.max) {
                         v.max = value.y; v.size = v.max - v.min;
                     }
-                    // let horizontalOffset = value.y.toFixed(2).length * imageConfig.textSize.width + imageConfig.size.client.width + 30;
-                    // if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
+                    if (imageConfig.updateSize) {
+                        let horizontalOffset = value.y.toFixed(2).length * imageConfig.textSize.width + imageConfig.size.client.width + 30;
+                        if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
+                    }
                 });
             });
 
