@@ -10,8 +10,8 @@
     <div id="content-container">content</div>
 </body>
 
-<!-- Постройка элементов -->
 <script>
+    // Постройка элементов
     const SVGTags = {
         SVG: 'svg',
         Group: 'g',
@@ -45,19 +45,7 @@
         }
         return element;
     }
-</script>
 
-<!-- Настройка элементов ввода -->
-<script>
-    const imageContainer = document.getElementById('content-container');
-    const imageConfig = { full: { height: 700, width: 900, }, client: { height: 600, width: 800, }, element: renderSVG({ tag: SVGTags.SVG }, true), };
-
-    imageContainer.innerHTML = '';
-    imageContainer.appendChild(imageConfig.element);
-</script>
-
-<!-- Отрисовка изображения -->
-<script>
     function generateValues() {
         let res = [];
         for (let i = 0; i < 10; i++) {
@@ -66,148 +54,161 @@
         return res;
     }
 
-    let currentInputValues = {
-        xDivisions: 10,
-        yDivisions: 10
-    };
+    function generateSVG() {
+        // Настройка элементов ввода
+        const imageContainer = document.getElementById('content-container');
+        const imageConfig = { full: { height: 700, width: 900, }, client: { height: 600, width: 800, }, element: renderSVG({ tag: SVGTags.SVG }), };
 
-    imageConfig.element.innerHTML = '';
+        imageContainer.innerHTML = '';
+        imageContainer.appendChild(imageConfig.element);
 
-    const textWidth = 9.6;
-    const textHeight = 18;
+        // Отрисовка изображения
 
-    const funcResult = generateValues();
-    const lastFuncResult = funcResult[funcResult.length - 1];
-
-    let scales = {
-        func: {
-            vertical: { min: lastFuncResult.y, max: lastFuncResult.y, size: 0 },
-            horizontal: { min: lastFuncResult.x, max: lastFuncResult.x, size: 0 },
-        },
-        image: {
-            vertical: { min: 0, max: imageConfig.client.height, size: imageConfig.client.height },
-            horizontal: { min: 0, max: imageConfig.client.width, size: imageConfig.client.width },
-        }
-    };
-
-    (function (v, h) {
-        funcResult.forEach(value => {
-            if (value.x < h.min) { h.min = value.x; h.size = h.max - h.min; } else if (value.x > h.max) { h.max = value.x; h.size = h.max - h.min; }
-            if (value.y < v.min) { v.min = value.y; v.size = v.max - v.min; } else if (value.y > v.max) { v.max = value.y; v.size = v.max - v.min; }
-            let horizontalOffset = value.y.toFixed(2).length * textWidth + imageConfig.client.width + 30;
-            if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
-        });
-    })(scales.func.vertical, scales.func.horizontal);
-
-    // Установка размеров
-    imageConfig.element.setAttribute('height', imageConfig.full.height);
-    imageConfig.element.setAttribute('width', imageConfig.full.width);
-
-    // Границы изображения
-    (function (size) {
-        let borderElement = { tag: SVGTags.Group, attributes: { style: 'stroke: black; stroke-width: 2px' }, childs: [] };
-        borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: 0, x2: size.width, y2: 0 } });
-        borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: size.height, x2: size.width, y2: size.height } });
-        borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: 0, x2: 0, y2: size.height } });
-        borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: size.width, y1: 0, x2: size.width, y2: size.height } });
-        let border = renderSVG(borderElement, true);
-        imageConfig.element.appendChild(border);
-    })(imageConfig.full);
-
-    function convertCoords(x, y) {
-        const offset = 5;
-        return { x: x + (imageConfig.full.width - imageConfig.client.width) - offset, y: imageConfig.client.height - y + offset };
-    }
-
-    function createLine(x1, y1, x2, y2) {
-        let s = convertCoords(x1, y1);
-        let e = convertCoords(x2, y2);
-        return { tag: SVGTags.Line, attributes: { x1: s.x, y1: s.y, x2: e.x, y2: e.y } };
-    }
-
-    // Стрелки шкал
-    (function (size) {
-        const arrowOffset = 5;
-        let scalesElement = { tag: SVGTags.Group, attributes: { style: 'stroke: rgb(27, 27, 27); stroke-width: 1px' }, childs: [] };
-        scalesElement.childs.push(createLine(0, 0, size.width, 0));
-        scalesElement.childs.push(createLine(size.width, 0, size.width - arrowOffset, arrowOffset));
-        scalesElement.childs.push(createLine(size.width, 0, size.width - arrowOffset, -arrowOffset));
-        scalesElement.childs.push(createLine(0, 0, 0, size.height));
-        scalesElement.childs.push(createLine(0, size.height, arrowOffset, size.height - arrowOffset));
-        scalesElement.childs.push(createLine(0, size.height, -arrowOffset, size.height - arrowOffset));
-
-        let scales = renderSVG(scalesElement, true);
-        imageConfig.element.appendChild(scales);
-    })(imageConfig.client);
-
-    function scaleCoords(x, y, sourceSize, resultSize) {
-        return {
-            x: (((x - sourceSize.horizontal.min) / sourceSize.horizontal.size) * resultSize.horizontal.size) + resultSize.horizontal.min,
-            y: (((y - sourceSize.vertical.min) / sourceSize.vertical.size) * resultSize.vertical.size) + resultSize.vertical.min,
+        let currentInputValues = {
+            xDivisions: 10,
+            yDivisions: 10
         };
+
+        imageConfig.element.innerHTML = '';
+
+        const textWidth = 9.6;
+        const textHeight = 18;
+
+        const funcResult = generateValues();
+        const lastFuncResult = funcResult[funcResult.length - 1];
+
+        let scales = {
+            func: {
+                vertical: { min: lastFuncResult.y, max: lastFuncResult.y, size: 0 },
+                horizontal: { min: lastFuncResult.x, max: lastFuncResult.x, size: 0 },
+            },
+            image: {
+                vertical: { min: 0, max: imageConfig.client.height, size: imageConfig.client.height },
+                horizontal: { min: 0, max: imageConfig.client.width, size: imageConfig.client.width },
+            }
+        };
+
+        (function (v, h) {
+            funcResult.forEach(value => {
+                if (value.x < h.min) { h.min = value.x; h.size = h.max - h.min; } else if (value.x > h.max) { h.max = value.x; h.size = h.max - h.min; }
+                if (value.y < v.min) { v.min = value.y; v.size = v.max - v.min; } else if (value.y > v.max) { v.max = value.y; v.size = v.max - v.min; }
+                let horizontalOffset = value.y.toFixed(2).length * textWidth + imageConfig.client.width + 30;
+                if (horizontalOffset > imageConfig.full.width) { imageConfig.full.width = horizontalOffset; }
+            });
+        })(scales.func.vertical, scales.func.horizontal);
+
+        // Установка размеров
+        imageConfig.element.setAttribute('height', imageConfig.full.height);
+        imageConfig.element.setAttribute('width', imageConfig.full.width);
+
+        // Границы изображения
+        (function (size) {
+            let borderElement = { tag: SVGTags.Group, attributes: { style: 'stroke: black; stroke-width: 2px' }, childs: [] };
+            borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: 0, x2: size.width, y2: 0 } });
+            borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: size.height, x2: size.width, y2: size.height } });
+            borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: 0, y1: 0, x2: 0, y2: size.height } });
+            borderElement.childs.push({ tag: SVGTags.Line, attributes: { x1: size.width, y1: 0, x2: size.width, y2: size.height } });
+            let border = renderSVG(borderElement);
+            imageConfig.element.appendChild(border);
+        })(imageConfig.full);
+
+        function convertCoords(x, y) {
+            const offset = 5;
+            return { x: x + (imageConfig.full.width - imageConfig.client.width) - offset, y: imageConfig.client.height - y + offset };
+        }
+
+        function createLine(x1, y1, x2, y2) {
+            let s = convertCoords(x1, y1);
+            let e = convertCoords(x2, y2);
+            return { tag: SVGTags.Line, attributes: { x1: s.x, y1: s.y, x2: e.x, y2: e.y } };
+        }
+
+        // Стрелки шкал
+        (function (size) {
+            const arrowOffset = 5;
+            let scalesElement = { tag: SVGTags.Group, attributes: { style: 'stroke: rgb(27, 27, 27); stroke-width: 1px' }, childs: [] };
+            scalesElement.childs.push(createLine(0, 0, size.width, 0));
+            scalesElement.childs.push(createLine(size.width, 0, size.width - arrowOffset, arrowOffset));
+            scalesElement.childs.push(createLine(size.width, 0, size.width - arrowOffset, -arrowOffset));
+            scalesElement.childs.push(createLine(0, 0, 0, size.height));
+            scalesElement.childs.push(createLine(0, size.height, arrowOffset, size.height - arrowOffset));
+            scalesElement.childs.push(createLine(0, size.height, -arrowOffset, size.height - arrowOffset));
+
+            let scales = renderSVG(scalesElement);
+            imageConfig.element.appendChild(scales);
+        })(imageConfig.client);
+
+        function scaleCoords(x, y, sourceSize, resultSize) {
+            return {
+                x: (((x - sourceSize.horizontal.min) / sourceSize.horizontal.size) * resultSize.horizontal.size) + resultSize.horizontal.min,
+                y: (((y - sourceSize.vertical.min) / sourceSize.vertical.size) * resultSize.vertical.size) + resultSize.vertical.min,
+            };
+        }
+
+        // Шкалы
+        (function () {
+            let scaleGridElement = { tag: SVGTags.Group, attributes: { style: 'stroke: gray; stroke-dasharray: 1, 5; stroke-width: 1px' }, childs: [] };
+            let scaleDivisionsElement = { tag: SVGTags.Group, attributes: { style: 'stroke: rgb(27, 27, 27); stroke-width: 1px' }, childs: [] };
+            let scaleTextElement = { tag: SVGTags.Group, attributes: { style: 'fill: black; font-family: "Courier New", Courier, monospace' }, childs: [] };
+
+            const xDivisionsPart = imageConfig.client.width / currentInputValues.xDivisions;
+            const yDivisionsPart = imageConfig.client.height / currentInputValues.yDivisions;
+            const divisionsOffset = 5;
+
+            // horizontal
+            for (let i = 0; i < currentInputValues.xDivisions; i++) {
+                let tempX = xDivisionsPart * i;
+                scaleGridElement.childs.push(createLine(tempX, 0, tempX, imageConfig.client.height));
+                scaleDivisionsElement.childs.push(createLine(tempX, -divisionsOffset, tempX, divisionsOffset));
+                let funcValue = scaleCoords(tempX, 0, scales.image, scales.func).x.toFixed(2);
+                let valWidth = funcValue.toString().length * textWidth;
+                let funcPos = convertCoords(tempX - valWidth / 2, -textHeight * 1.5);
+                scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: funcPos.x, y: funcPos.y }, value: funcValue });
+            }
+            let horizontalLablePos = convertCoords(imageConfig.client.width - textWidth, -textHeight * 1.5);
+            scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: horizontalLablePos.x, y: horizontalLablePos.y }, value: 't' });
+
+            // vertical
+            for (let i = 0; i < currentInputValues.yDivisions; i++) {
+                let tempY = yDivisionsPart * i;
+                scaleGridElement.childs.push(createLine(0, tempY, imageConfig.client.width, tempY));
+                scaleDivisionsElement.childs.push(createLine(-divisionsOffset, tempY, divisionsOffset, tempY));
+                let funcValue = scaleCoords(0, tempY, scales.image, scales.func).y.toFixed(2);
+                let valWidth = funcValue.toString().length * textWidth;
+                let funcPos = convertCoords(- (valWidth + divisionsOffset * 2), tempY - (textHeight / 4));
+                scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: funcPos.x, y: funcPos.y }, value: funcValue });
+            }
+            let verticalLablePos = convertCoords(- (textWidth + divisionsOffset * 2), imageConfig.client.height - textHeight);
+            scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: verticalLablePos.x, y: verticalLablePos.y }, value: 'U' });
+
+            let scaleGrid = renderSVG(scaleGridElement);
+            imageConfig.element.appendChild(scaleGrid);
+
+            let scaleDivisions = renderSVG(scaleDivisionsElement);
+            imageConfig.element.appendChild(scaleDivisions);
+
+            let scaleText = renderSVG(scaleTextElement);
+            imageConfig.element.appendChild(scaleText);
+        })();
+
+        // Линия функции
+        (function () {
+            let points = funcResult.map(value => scaleCoords(value.x, value.y, scales.func, scales.image));
+            points = points.map(value => convertCoords(value.x, value.y));
+            points = points.map(value => `${value.x}, ${value.y}`);
+            points = points.join(' ');
+
+            let funcLineElement = {
+                tag: SVGTags.Group,
+                attributes: { style: 'fill: none; stroke: red; stroke-width: 1px' },
+                childs: [{ tag: SVGTags.Polyline, attributes: { points: points } },]
+            };
+            let funcLine = renderSVG(funcLineElement);
+            imageConfig.element.appendChild(funcLine);
+        })();
     }
 
-    // Шкалы
-    (function () {
-        let scaleGridElement = { tag: SVGTags.Group, attributes: { style: 'stroke: gray; stroke-dasharray: 1, 5; stroke-width: 1px' }, childs: [] };
-        let scaleDivisionsElement = { tag: SVGTags.Group, attributes: { style: 'stroke: rgb(27, 27, 27); stroke-width: 1px' }, childs: [] };
-        let scaleTextElement = { tag: SVGTags.Group, attributes: { style: 'fill: black; font-family: "Courier New", Courier, monospace' }, childs: [] };
-
-        const xDivisionsPart = imageConfig.client.width / currentInputValues.xDivisions;
-        const yDivisionsPart = imageConfig.client.height / currentInputValues.yDivisions;
-        const divisionsOffset = 5;
-
-        // horizontal
-        for (let i = 0; i < currentInputValues.xDivisions; i++) {
-            let tempX = xDivisionsPart * i;
-            scaleGridElement.childs.push(createLine(tempX, 0, tempX, imageConfig.client.height));
-            scaleDivisionsElement.childs.push(createLine(tempX, -divisionsOffset, tempX, divisionsOffset));
-            let funcValue = scaleCoords(tempX, 0, scales.image, scales.func).x.toFixed(2);
-            let valWidth = funcValue.toString().length * textWidth;
-            let funcPos = convertCoords(tempX - valWidth / 2, -textHeight * 1.5);
-            scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: funcPos.x, y: funcPos.y }, value: funcValue });
-        }
-        let horizontalLablePos = convertCoords(imageConfig.client.width - textWidth, -textHeight * 1.5);
-        scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: horizontalLablePos.x, y: horizontalLablePos.y }, value: 't' });
-
-        // vertical
-        for (let i = 0; i < currentInputValues.yDivisions; i++) {
-            let tempY = yDivisionsPart * i;
-            scaleGridElement.childs.push(createLine(0, tempY, imageConfig.client.width, tempY));
-            scaleDivisionsElement.childs.push(createLine(-divisionsOffset, tempY, divisionsOffset, tempY));
-            let funcValue = scaleCoords(0, tempY, scales.image, scales.func).y.toFixed(2);
-            let valWidth = funcValue.toString().length * textWidth;
-            let funcPos = convertCoords(- (valWidth + divisionsOffset * 2), tempY - (textHeight / 4));
-            scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: funcPos.x, y: funcPos.y }, value: funcValue });
-        }
-        let verticalLablePos = convertCoords(- (textWidth + divisionsOffset * 2), imageConfig.client.height - textHeight);
-        scaleTextElement.childs.push({ tag: SVGTags.Text, attributes: { x: verticalLablePos.x, y: verticalLablePos.y }, value: 'U' });
-
-        let scaleGrid = renderSVG(scaleGridElement, true);
-        imageConfig.element.appendChild(scaleGrid);
-
-        let scaleDivisions = renderSVG(scaleDivisionsElement, true);
-        imageConfig.element.appendChild(scaleDivisions);
-
-        let scaleText = renderSVG(scaleTextElement, true);
-        imageConfig.element.appendChild(scaleText);
-    })();
-
-    // Линия функции
-    (function () {
-        let points = funcResult.map(value => scaleCoords(value.x, value.y, scales.func, scales.image));
-        points = points.map(value => convertCoords(value.x, value.y));
-        points = points.map(value => `${value.x}, ${value.y}`);
-        points = points.join(' ');
-
-        let funcLineElement = {
-            tag: SVGTags.Group,
-            attributes: { style: 'fill: none; stroke: red; stroke-width: 1px' },
-            childs: [{ tag: SVGTags.Polyline, attributes: { points: points } },]
-        };
-        let funcLine = renderSVG(funcLineElement, true);
-        imageConfig.element.appendChild(funcLine);
-    })();
+    generateSVG();
 </script>
 
 </html>
