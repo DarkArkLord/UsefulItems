@@ -8,18 +8,16 @@ $ImplPath = 'D:\Program\Sogaz\Implementation';
 $Commands = @{
     Move = @{
         Mono = ('cd ' + $MonoPath);
-#        Client = ('cd ' + $MonoPath + '\client');
-        Implementation = ('cd ' + $ImplPath);
-        ImplementationConfiguration = ('cd ' + $ImplConfPath + '\configuration');
+        Impl = ('cd ' + $ImplPath);
+        ImplConf = ('cd ' + $ImplPath + '\configuration');
     };
     Run = @{
         Server = '.\build.ps1 -RunServer';
-#        IIS = '.\build.ps1 -RunIS';
-#        Client = 'yarn run start';
         Docker = 'docker-compose up --scale server=0';
     };
     Kill = @{
         Docker = 'docker-compose stop';
+        Server = 'Get-Process | ? ProcessName -EQ "AdInsure.Server" | select Id | kill';
     };
     Build = @{
         CleanGit = 'git clean -dfx';
@@ -36,29 +34,38 @@ class TabConfig {
 }
 
 $TabsConfig = @{
-    Server = [TabConfig]@{
-        Name = 'Server';
-        ToExecute = @($Commands.Move.Mono, $Commands.Run.Server)
-    };
-#    IIS = [TabConfig]@{
-#        Name = 'IIS';
-#        ToExecute = @($Commands.Move.Mono, $Commands.Run.IIS)
-#    };
-#    Client = [TabConfig]@{
-#        Name = 'Client';
-#        ToExecute = @($Commands.Move.Client, $Commands.Run.Client)
-#    };
     Docker = [TabConfig]@{
         Name = 'Docker';
-        ToExecute = @($Commands.Move.Implementation, $Commands.Run.Docker)
+        ToExecute = @(
+            $Commands.Move.Impl, 
+            $Commands.Run.Docker
+        )
     };
-    KillDocker = [TabConfig]@{
-        Name = 'KillDocker';
-        ToExecute = @($Commands.Move.Implementation, $Commands.Kill.Docker)
+    Killer = [TabConfig]@{
+        Name = 'Killer';
+        ToExecute = @(
+            $Commands.Kill.Server,
+            $Commands.Move.Impl, 
+            $Commands.Kill.Docker
+        )
+    };
+    Server = [TabConfig]@{
+        Name = 'Server';
+        ToExecute = @(
+            $Commands.Move.Mono, 
+            $Commands.Run.Server
+        )
     };
     ReBuildServer = [TabConfig]@{
-        Name = 'Server';
-        ToExecute = @($Commands.Move.ImplementationConfiguration, $Commands.Build.CleanGit, $Commands.Move.Implementation, $Commands.Build.Install, $Commands.Build.Impl, $Commands.Move.Mono, $Commands.Run.Server)
+        Name = 'Server-builder';
+        ToExecute = @(
+            $Commands.Kill.Server,
+            $Commands.Move.ImplConf, 
+            $Commands.Build.CleanGit, 
+            $Commands.Move.Impl, 
+            $Commands.Build.Install, 
+            $Commands.Build.Impl
+        )
     };
 };
 
@@ -77,9 +84,11 @@ function Create-Tab {
     param (
         [TabConfig]$config
     )
-
-    $tab = $psISE.PowerShellTabs.Add();
-    $tab.DisplayName = $config.Name;
+    $tab = $psISE.PowerShellTabs | ? DisplayName -EQ $config.Name;
+    if(-not $tab) {
+        $tab = $psISE.PowerShellTabs.Add();
+        $tab.DisplayName = $config.Name;
+    }
 
     foreach($script in $config.ToExecute) {
         Wait-Tab $tab
@@ -90,28 +99,23 @@ function Create-Tab {
 
 if($kill)
 {
-    $Tabs = @{
-        Docker = Create-Tab $TabsConfig.KillDocker;
-    };
+    $temp = Create-Tab $TabsConfig.Killer;
 }
 else 
 {
     if($rebuild)
     {
-        $Tabs = @{
-            Server = Create-Tab $TabsConfig.ReBuildServer;
-        };
+        $temp = Create-Tab $TabsConfig.ReBuildServer;
+        Wait-Tab $temp;
+        $temp = Create-Tab $TabsConfig.Server;
     }
     else
     {
-        $Tabs = @{
-            Docker = Create-Tab $TabsConfig.Docker;
-            Server = Create-Tab $TabsConfig.Server;
-        #    IIS = Create-Tab $TabsConfig.IIS;
-        #    Client = Create-Tab $TabsConfig.Client;
-        };
+        $temp = Create-Tab $TabsConfig.Docker;
+        $temp = Create-Tab $TabsConfig.Server;
     }
 }
 
 # TODO:
 # - Сделать, чтобы при закрытии вкладки закрывались запущенные процессы
+# - Добавить менюшку
