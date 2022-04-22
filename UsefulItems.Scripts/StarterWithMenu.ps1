@@ -16,7 +16,7 @@ $Commands = @{
     };
     Kill  = @{
         Docker = 'docker-compose stop';
-        Server = 'Get-Process | ? ProcessName -Like "*AdInsure*" | select Id | kill';
+        Server = 'Get-Process | ? ProcessName -Like "*AdInsure*" | ForEach-Object -Process { kill $_.Id }';
     };
     Build = @{
         CleanGit = 'git clean -dfx';
