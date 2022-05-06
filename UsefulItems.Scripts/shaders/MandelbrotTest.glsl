@@ -1,6 +1,9 @@
 vec2 getNormalCoords(vec2 cur) 
 {
-    return (cur / iResolution.xy - vec2(0.5)) * 2.0;
+    float divider = iResolution.y < iResolution.x 
+        ? iResolution.y 
+        : iResolution.x;
+    return (2.0 * cur - iResolution.xy) / divider;
 }
 
 vec2 mul(vec2 a, vec2 b)
@@ -22,26 +25,23 @@ float len(vec2 cur)
 
 vec3 checkPoint(vec2 cur) 
 {
-    int loopSteps = 5000;
-    
-    vec3 white = vec3(1.0);
-    vec3 black = vec3(0.0);
+    float loopSteps = 100.0;
     
     vec2 t = vec2(cur);
-    for(int i = 0; i < loopSteps; i++) 
+    float i;
+    for(i = 0.0; i < loopSteps; i++) 
     {
         t = sqr(t) + cur;
-        if(len(t) > 4.0)
-        {
-            return white;
-        }
+        float l = len(t);
+        if(l > 4.0) break;
     }
-    return black;
+    return vec3(1.0 - i / loopSteps);
 }
 
-void mainImage( out vec4 outColor, in vec2 inCoord)
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 cur = getNormalCoords(inCoord) - vec2(0.45, 0);
+    vec2 cur = getNormalCoords(fragCoord) - vec2(0.45, 0);
     vec3 color = checkPoint(cur);
-    outColor = vec4(color,1.0);
+    // Output to screen
+    fragColor = vec4(color,1.0);
 }
