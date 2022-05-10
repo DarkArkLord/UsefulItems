@@ -145,10 +145,18 @@ void render(inout vec3 col, in vec2 uv) {
     }
 }
 
+vec2 getNormalCoords(vec2 cur) 
+{
+    float divider = iResolution.y < iResolution.x 
+        ? iResolution.y 
+        : iResolution.x;
+    return (2.0 * cur - iResolution.xy) / divider;
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
-    // Normalized pixel coordinates (from -1 to 1)
-    vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.xy;
+    // Normalized pixel coordinates
+    vec2 uv = getNormalCoords(fragCoord);
 
     vec3 col;
     render(col, uv);
