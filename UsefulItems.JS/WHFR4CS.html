@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHFR4CS</title>
+</head>
+
+<body>
+    <style>
+        * {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+    <script>
+        function render(tag, attributes, ...childs) {
+            if (tag instanceof Function) {
+                return tag(attributes, ...childs);
+            }
+
+            let element = document.createElement(tag);
+
+            if (attributes) {
+                for (const name in attributes) {
+                    let value = attributes[name];
+                    element.setAttribute(name, value);
+                }
+            }
+
+            for (const child of childs) {
+                (function addChild(parent, child) {
+                    if (Array.isArray(child)) {
+                        for (const innerChild of child) {
+                            addChild(parent, innerChild);
+                        }
+                    } else {
+                        parent.appendChild(
+                            child instanceof HTMLElement
+                                ? child
+                                : document.createTextNode(child)
+                        );
+                    }
+                })(element, child);
+            }
+
+            return element;
+        }
+
+        class DRandom {
+            constructor(seed) {
+                this.seed = seed;
+                this.prevValue = seed;
+                this.value = seed;
+            }
+            next(min, max) {
+                this.prevValue = (64525 * this.prevValue + 1013904223) % 4294967296;
+                this.value = this.prevValue % (max - min + 1) + min;
+                return this.value;
+            }
+        }
+
+        const rnd = new DRandom(5);
+        const checkCount = 100000;
+        const diceResults = Array.from(Array(checkCount))
+            .map(_ => rnd.next(1, 10))
+            .reduce((acc, cur) => {
+                acc[cur] = (acc[cur] || 0) + 1;
+                return acc;
+            }, {});
+        for (const i in diceResults) {
+            diceResults[i] = (diceResults[i] / checkCount * 100 * 100 | 0) / 100;
+        }
+        const items = Object.keys(diceResults)
+            .sort((a, b) => a - b)
+            .map(value => `${value} -> ${diceResults[value]}`);
+        document.body.append(
+            render('ul', false,
+                ...items.map(value => render('li', false, value))
+            )
+        );
+    </script>
+</body>
+
+</html>
