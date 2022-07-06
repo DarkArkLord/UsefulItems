@@ -60,25 +60,54 @@
             }
         }
 
-        const rnd = new DRandom(5);
+        function float(value, accuracy = 6) {
+            const temp = 10 ** accuracy;
+            return (value * temp | 0) / temp;
+        }
+
+        const rnd = new DRandom(Date.now());
         const checkCount = 100000;
+        const diceValue = 10;
         const diceResults = Array.from(Array(checkCount))
-            .map(_ => rnd.next(1, 10))
+            .map(_ => rnd.next(1, diceValue))
             .reduce((acc, cur) => {
                 acc[cur] = (acc[cur] || 0) + 1;
                 return acc;
             }, {});
         for (const i in diceResults) {
-            diceResults[i] = (diceResults[i] / checkCount * 100 * 100 | 0) / 100;
+            diceResults[i] = float(diceResults[i] / checkCount * 100);
         }
-        const items = Object.keys(diceResults)
-            .sort((a, b) => a - b)
-            .map(value => `${value} -> ${diceResults[value]}`);
-        document.body.append(
-            render('ul', false,
-                ...items.map(value => render('li', false, value))
-            )
-        );
+
+        (function () {
+            const items = Object.keys(diceResults)
+                .sort((a, b) => a - b)
+                .map(value => `${value} -> ${diceResults[value]}`);
+
+            document.body.append(
+                render('ul', false,
+                    ...items.map(value => render('li', false, value))
+                )
+            );
+        })();
+
+        (function () {
+            const sum = Object.values(diceResults).reduce((acc, cur) => acc += cur, 0);
+            const mid = float(sum / diceValue);
+            const errors = Object.values(diceResults).map(value => value - mid);
+            const midError = float(errors.reduce((acc, cur) => acc += cur, 0) / diceValue);
+            const midError2 = float(errors.reduce((acc, cur) => acc += (cur * cur), 0) / diceValue);
+            const midError2s = float(Math.sqrt(midError2));
+
+            document.body.append(
+                render('ul', false,
+                    render('li', false, 'sum -> ', sum),
+                    render('li', false, 'mid -> ', mid),
+                    render('li', false, 'midError -> ', midError),
+                    render('li', false, 'midError2 -> ', midError2),
+                    render('li', false, 'midError2s -> ', midError2s),
+                )
+            );
+        })();
     </script>
 </body>
 
