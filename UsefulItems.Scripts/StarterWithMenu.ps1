@@ -20,7 +20,7 @@ $Commands = @{
     };
     Build = @{
         CleanGit = 'git clean -dfx';
-        Install  = 'yarn install';
+        Install  = 'yarn install --ignore-scripts';
         RestoreDotnet     = 'dotnet restore --interactive';
         Impl     = '.\build.ps1 -Build -ExecuteScripts -BuildPrintouts';
     };
