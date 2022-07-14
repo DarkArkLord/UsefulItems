@@ -15,9 +15,7 @@ namespace ConsoleTest
         {
             Console.WriteLine("START!\n==========");
 
-            var command = "cd ~/Adacta/Implementation_sber; docker-compose up -d";
-            var process = System.Diagnostics.Process.Start("wsl", command);
-            process.WaitForExit();
+            RunProcessPS();
 
             Console.WriteLine("\n==========\nEND!");
         }
@@ -46,7 +44,7 @@ namespace ConsoleTest
             }
         }
 
-        static void RunProcess()
+        static void RunProcessWsl()
         {
             var command = "cd ~/Adacta/Implementation_sber; docker-compose up -d";
             var process = System.Diagnostics.Process.Start("wsl", command);
@@ -56,6 +54,19 @@ namespace ConsoleTest
 
             command = "cd ~/Adacta/Implementation_sber; docker-compose stop";
             process = System.Diagnostics.Process.Start("wsl", command);
+            process.WaitForExit();
+        }
+
+        static void RunProcessPS()
+        {
+            var command = "start wsl { cd ~/Adacta/Implementation_sber; docker-compose up -d }";
+            var process = System.Diagnostics.Process.Start("powershell", command);
+            process.WaitForExit();
+
+            Console.WriteLine("\n==========");
+
+            command = "start wsl { cd ~/Adacta/Implementation_sber; docker-compose stop }";
+            process = System.Diagnostics.Process.Start("powershell", command);
             process.WaitForExit();
         }
     }
