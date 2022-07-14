@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace ScriptRunner
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            // Some code
         }
     }
 }
