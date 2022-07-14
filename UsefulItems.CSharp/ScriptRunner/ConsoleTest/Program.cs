@@ -17,14 +17,15 @@ namespace ConsoleTest
 
             using (PowerShell ps = PowerShell.Create())
             {
-                Print(ps.AddScript("cd C:/")
+                Print(ps.AddScript("Write-Output 1")
                     .Invoke());
-            }
-
-            using (PowerShell ps = PowerShell.Create())
-            {
-                Print(ps.AddScript("dir")
-                    .Invoke());
+                ps.Commands.Clear();
+                Print(ps.AddCommand("Write-Output")
+                    .Invoke(new[] { 2, 3, 4 }));
+                ps.Commands.Clear();
+                Print(ps.AddCommand("Sort-Object")
+                    .AddCommand("Write-Output")
+                    .Invoke(new[] { 7, 6, 5 }));
             }
 
             Console.WriteLine("\n==========\nEND!");
