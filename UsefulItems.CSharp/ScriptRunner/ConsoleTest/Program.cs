@@ -28,8 +28,14 @@ namespace ConsoleTest
                     .Invoke(new[] { 7, 6, 5 }));
             }
 
-            string command = "Write-Host 1";
-            var process = System.Diagnostics.Process.Start("powershell.exe", command);
+            var command = "cd ~/Adacta/Implementation_sber; docker-compose up -d";
+            var process = System.Diagnostics.Process.Start("wsl", command);
+            process.WaitForExit();
+
+            Console.WriteLine("\n==========");
+
+            command = "cd ~/Adacta/Implementation_sber; docker-compose stop";
+            process = System.Diagnostics.Process.Start("wsl", command);
             process.WaitForExit();
 
             Console.WriteLine("\n==========\nEND!");
