@@ -15,6 +15,15 @@ namespace ConsoleTest
         {
             Console.WriteLine("START!\n==========");
 
+            var command = "cd ~/Adacta/Implementation_sber; docker-compose up -d";
+            var process = System.Diagnostics.Process.Start("wsl", command);
+            process.WaitForExit();
+
+            Console.WriteLine("\n==========\nEND!");
+        }
+
+        static void RunPS()
+        {
             using (PowerShell ps = PowerShell.Create())
             {
                 Print(ps.AddScript("Write-Output 1")
@@ -27,7 +36,18 @@ namespace ConsoleTest
                     .AddCommand("Write-Output")
                     .Invoke(new[] { 7, 6, 5 }));
             }
+        }
 
+        static void Print(Collection<PSObject> pipeline)
+        {
+            foreach (var item in pipeline)
+            {
+                Console.WriteLine(item.BaseObject.ToString());
+            }
+        }
+
+        static void RunProcess()
+        {
             var command = "cd ~/Adacta/Implementation_sber; docker-compose up -d";
             var process = System.Diagnostics.Process.Start("wsl", command);
             process.WaitForExit();
@@ -37,16 +57,6 @@ namespace ConsoleTest
             command = "cd ~/Adacta/Implementation_sber; docker-compose stop";
             process = System.Diagnostics.Process.Start("wsl", command);
             process.WaitForExit();
-
-            Console.WriteLine("\n==========\nEND!");
-        }
-
-        static void Print(Collection<PSObject> pipeline)
-        {
-            foreach (var item in pipeline)
-            {
-                Console.WriteLine(item.BaseObject.ToString());
-            }
         }
     }
 }
