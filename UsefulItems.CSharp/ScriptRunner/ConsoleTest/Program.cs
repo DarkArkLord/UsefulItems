@@ -28,6 +28,10 @@ namespace ConsoleTest
                     .Invoke(new[] { 7, 6, 5 }));
             }
 
+            string command = "Write-Host 1";
+            var process = System.Diagnostics.Process.Start("powershell.exe", command);
+            process.WaitForExit();
+
             Console.WriteLine("\n==========\nEND!");
         }
 
