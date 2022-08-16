@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td id="display-container" colspan="5">
+                display
+            </td>
+        </tr>
+        <tr>
+            <td id="combo-container" colspan="5">
+                combo
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="reroll-0">
+            </td>
+            <td>
+                <input type="checkbox" id="reroll-1">
+            </td>
+            <td>
+                <input type="checkbox" id="reroll-2">
+            </td>
+            <td>
+                <input type="checkbox" id="reroll-3">
+            </td>
+            <td>
+                <input type="checkbox" id="reroll-4">
+            </td>
+        </tr>
+        <tr>
+            <td id="dice-value-0">
+                1
+            </td>
+            <td id="dice-value-1">
+                1
+            </td>
+            <td id="dice-value-2">
+                1
+            </td>
+            <td id="dice-value-3">
+                1
+            </td>
+            <td id="dice-value-4">
+                1
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <button id="button-roll">roll</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <button id="button-reset">reset</button>
+            </td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    const controlElements = {
+        buttons: {
+            roll: document.getElementById('button-roll'),
+            reset: document.getElementById('button-reset'),
+        },
+        display: {
+            headerText: document.getElementById('display-container'),
+            combo: document.getElementById('combo-container'),
+            dices: [
+                document.getElementById('dice-value-0'),
+                document.getElementById('dice-value-1'),
+                document.getElementById('dice-value-2'),
+                document.getElementById('dice-value-3'),
+                document.getElementById('dice-value-4'),
+            ]
+        },
+        checkbox: [
+            document.getElementById('reroll-0'),
+            document.getElementById('reroll-1'),
+            document.getElementById('reroll-2'),
+            document.getElementById('reroll-3'),
+            document.getElementById('reroll-4'),
+        ],
+    };
+
+    const gameInfo = {
+        dices: []
+    };
+
+    const dicesCombo = {
+        poker: 'POKER',
+        kare: 'KARE',
+        fullHouse: 'FULL_HOUSE',
+        bigStraight: 'BIG_STRAIGHT',
+        smallStraight: 'SMALL_STRAIGHT',
+        set: 'SET',
+        twoPairs: 'TWO_PAIRS',
+        pair: 'PAIR',
+        none: 'NONE',
+    };
+
+    const gameSteps = {
+        firstRoll: 'ROLL DICES',
+        chooseReRoll: 'CHOOSE REROLL DICES',
+        secondRoll: 'ROLL DICES',
+        final: 'GAME ENDED',
+    };
+
+    function generateDiceValue() {
+        const min = 1;
+        const max = 6;
+        return ((Math.random() * (max - min + 1)) | 0) + min;
+    }
+
+    function rollAllDices() {
+        for (let i = 0; i < 5; i++) {
+            gameInfo.dices[i] = generateDiceValue();
+        }
+        // gameInfo.dices = gameInfo.dices.sort();
+    }
+
+    function reRollSelectedDices() {
+        for (let i = 0; i < 5; i++) {
+            if (controlElements.checkbox[i] && controlElements.checkbox[i].checked) {
+                gameInfo.dices[i] = generateDiceValue();
+            }
+        }
+        // gameInfo.dices = gameInfo.dices.sort();
+    }
+
+    function showDiceValues() {
+        for (let i = 0; i < 5; i++) {
+            const value = gameInfo.dices[i];
+            const display = controlElements.display.dices[i];
+            if (display != undefined) {
+                if (value != undefined) {
+                    display.innerHTML = value.toString();
+                } else {
+                    display.innerHTML = -1;
+                }
+            }
+        }
+    }
+
+    function disable(element) {
+        element.setAttribute('disabled', undefined)
+    }
+
+    function enable(element) {
+        element.removeAttribute('disabled', undefined)
+    }
+
+    function dropChecked() {
+        controlElements.checkbox.forEach(value => value.checked = false);
+    }
+
+    function resetGame() {
+        controlElements.display.headerText.innerHTML = gameSteps.firstRoll;
+        controlElements.display.combo.innerHTML = dicesCombo.none;
+        gameInfo.dices = [];
+        showDiceValues();
+        controlElements.checkbox.forEach(disable);
+        dropChecked();
+        enable(controlElements.buttons.roll);
+        controlElements.buttons.roll.onclick = function () {
+            rollAllDices();
+            showDiceValues();
+            controlElements.checkbox.forEach(enable);
+            controlElements.buttons.roll.onclick = function () {
+                reRollSelectedDices();
+                showDiceValues();
+                disable(controlElements.buttons.roll);
+                dropChecked();
+            }
+        }
+    }
+    controlElements.buttons.reset.onclick = resetGame;
+    resetGame();
+</script>
+
+</html>
