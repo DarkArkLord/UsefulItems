@@ -111,8 +111,7 @@
 
     const gameSteps = {
         firstRoll: 'ROLL DICES',
-        chooseReRoll: 'CHOOSE REROLL DICES',
-        secondRoll: 'ROLL DICES',
+        chooseReRoll: 'CHOOSE REROLL DICES AND REROLL',
         final: 'GAME ENDED',
     };
 
@@ -126,7 +125,7 @@
         for (let i = 0; i < 5; i++) {
             gameInfo.dices[i] = generateDiceValue();
         }
-        // gameInfo.dices = gameInfo.dices.sort();
+        gameInfo.dices = gameInfo.dices.sort();
     }
 
     function reRollSelectedDices() {
@@ -135,7 +134,7 @@
                 gameInfo.dices[i] = generateDiceValue();
             }
         }
-        // gameInfo.dices = gameInfo.dices.sort();
+        gameInfo.dices = gameInfo.dices.sort();
     }
 
     function showDiceValues() {
@@ -176,11 +175,13 @@
             rollAllDices();
             showDiceValues();
             controlElements.checkbox.forEach(enable);
+            controlElements.display.headerText.innerHTML = gameSteps.chooseReRoll;
             controlElements.buttons.roll.onclick = function () {
                 reRollSelectedDices();
                 showDiceValues();
                 disable(controlElements.buttons.roll);
                 dropChecked();
+                controlElements.display.headerText.innerHTML = gameSteps.final;
             }
         }
     }
