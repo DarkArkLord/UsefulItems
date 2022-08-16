@@ -125,7 +125,7 @@
         for (let i = 0; i < 5; i++) {
             gameInfo.dices[i] = generateDiceValue();
         }
-        gameInfo.dices = gameInfo.dices.sort();
+        // gameInfo.dices = gameInfo.dices.sort();
     }
 
     function reRollSelectedDices() {
@@ -134,7 +134,7 @@
                 gameInfo.dices[i] = generateDiceValue();
             }
         }
-        gameInfo.dices = gameInfo.dices.sort();
+        // gameInfo.dices = gameInfo.dices.sort();
     }
 
     function showDiceValues() {
@@ -149,6 +149,11 @@
                 }
             }
         }
+    }
+
+    function fundCombination() {
+        const dices = [...gameInfo.dices].sort();
+        return dices.join('-');
     }
 
     function disable(element) {
@@ -174,11 +179,14 @@
         controlElements.buttons.roll.onclick = function () {
             rollAllDices();
             showDiceValues();
+            controlElements.display.combo.innerHTML = fundCombination();
             controlElements.checkbox.forEach(enable);
             controlElements.display.headerText.innerHTML = gameSteps.chooseReRoll;
             controlElements.buttons.roll.onclick = function () {
                 reRollSelectedDices();
                 showDiceValues();
+                controlElements.display.combo.innerHTML = fundCombination();
+                controlElements.checkbox.forEach(disable);
                 disable(controlElements.buttons.roll);
                 dropChecked();
                 controlElements.display.headerText.innerHTML = gameSteps.final;
