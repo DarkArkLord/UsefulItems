@@ -153,7 +153,45 @@
 
     function fundCombination() {
         const dices = [...gameInfo.dices].sort();
-        return dices.join('-');
+        const diceCount = dices.reduce((acc, cur) => {
+            acc[cur] = (acc[cur] || 0) + 1;
+            return acc;
+        }, []);
+
+        if (Object.values(diceCount).includes(5)) {
+            return dicesCombo.poker;
+        }
+
+        if (Object.values(diceCount).includes('4')) {
+            return dicesCombo.kare;
+        }
+
+        if (Object.values(diceCount).includes(3) && Object.values(diceCount).includes(2)) {
+            return dicesCombo.fullHouse;
+        }
+
+        if (Object.keys(diceCount).length == 5) {
+            if (!Object.keys(diceCount).includes('1')) {
+                return dicesCombo.bigStraight;
+            }
+            if (!Object.keys(diceCount).includes('6')) {
+                return dicesCombo.smallStraight;
+            }
+        }
+
+        if (Object.values(diceCount).includes(3)) {
+            return dicesCombo.set;
+        }
+
+        if (Object.values(diceCount).includes(2)) {
+            if (Object.values(diceCount).filter(value => value == 2).length == 2) {
+                return dicesCombo.twoPairs;
+            }
+
+            return dicesCombo.pair;
+        }
+
+        return dicesCombo.none;
     }
 
     function disable(element) {
