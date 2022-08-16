@@ -152,6 +152,7 @@
     }
 
     function fundCombination() {
+        // ??? Наверное надо улучшить
         const dices = [...gameInfo.dices].sort();
         const diceCount = dices.reduce((acc, cur) => {
             acc[cur] = (acc[cur] || 0) + 1;
