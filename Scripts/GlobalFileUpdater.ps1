@@ -1,4 +1,4 @@
-﻿$rootFolder = "D:\Program\Adacta\Implementation_sogaz\configuration\@config-sogaz\AgentAgreement\etlService\AgentAgreementImportEtlService\sinkMappings"
+﻿$rootFolder = "D:\Program"
 $fileExt = "*.js"
 $filesList = Get-ChildItem -Recurse -Path $rootFolder -Include $fileExt -File
 
