@@ -78,7 +78,7 @@ const inputData = [
     {
         header: '"miniDimClientInfo" - часто изменяющиеся данные таблицы dimClient',
         lines: [
-            ['ClientInfoKey', 'int not null', 'Суррогатный первичный ключ со свойством IDENTITY(1, 1)',],
+            ['keyClientInfo', 'int not null', 'Суррогатный первичный ключ со свойством IDENTITY(1, 1)',],
             ['Age', 'int null', 'Возвраст клиента',],
             ['KindOfActivity', 'varchar null', 'Профессия клиента',],
             ['Married', 'bool null', 'Состоит ли клиент в браке',],
@@ -86,8 +86,10 @@ const inputData = [
     },
 ]
 
+const outLines = [];
+
 inputData.forEach(data => {
-    console.log(data.header);
+    outLines.push(data.header);
 
     const maxColumnLen = data.lines.concat(headers).reduce((acc, cur) => {
         for (const i in acc) {
@@ -99,18 +101,20 @@ inputData.forEach(data => {
     const tableBorders = maxColumnLen.map(cnt => '-'.repeat(cnt)).join('-+-');
     const headerText = headers.map((value, index) => addSpacesMiddle(value, maxColumnLen[index], true)).join(' | ');
 
-    console.log(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
-    console.log(`${tableBorder.start.line}${headerText}${tableBorder.end.line}`);
-    console.log(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
+    outLines.push(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
+    outLines.push(`${tableBorder.start.line}${headerText}${tableBorder.end.line}`);
+    outLines.push(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
 
     data.lines.forEach(line => {
         // const linetext = line.map((value, index) => addSpacesLeft(value, maxColumnLen[index])).join(' | ');
         const linetext = [addSpacesLeft(line[0], maxColumnLen[0]), addSpacesMiddle(line[1], maxColumnLen[1]), addSpacesRight(line[2], maxColumnLen[2]), ].join(' | ');
-        console.log(`${tableBorder.start.line}${linetext}${tableBorder.end.line}`);
+        outLines.push(`${tableBorder.start.line}${linetext}${tableBorder.end.line}`);
     });
 
-    console.log(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
+    outLines.push(`${tableBorder.start.border}${tableBorders}${tableBorder.end.border}`);
 });
+
+console.log(outLines.join('\n'));
 
 function addSpacesMiddle(text, targetLen) {
     const freeSpaceLen = (targetLen - text.length) / 2;
@@ -132,12 +136,4 @@ function addSpacesLeft(text, targetLen) {
     const beforeText = freeSpaceLen > 0 ? ' '.repeat(freeSpaceLen) : '';
     return `${beforeText}${text}`;
 }
-
-
-// miniDimClientInfo {
-// 	ClientInfoKey int pk increments
-// 	Age int
-// 	KindOfActivity varchar
-// 	Married bool
-// }
 
