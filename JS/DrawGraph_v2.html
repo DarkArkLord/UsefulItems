@@ -59,10 +59,16 @@
                 dynamicScalesX: false,
                 dynamicScalesY: false,
                 hideValuesOutOfScales: true,
+
                 xPoints: 10,
                 yPoints: 10,
+
                 xScaleValues: [0, 2, 3, 4, 5, 6, 7, 8,],
                 yScaleValues: [-8, -6, -4, -2, 0, 2, 4, 6, 8,],
+
+                xScaleTextAccuracy: 2,
+                yScaleTextAccuracy: 2,
+
                 xText: 'X',
                 yText: 'Y',
             },
@@ -360,7 +366,7 @@
                 // Добавление по количеству штрихов
                 for (let i = 0; i < config.image.scales.xPoints; i++) {
                     const x = xPointPart * i;
-                    const value = scaleCoords(x, 0, scales.image, scales.func).x.toFixed(2);
+                    const value = scaleCoords(x, 0, scales.image, scales.func).x.toFixed(config.image.scales.xScaleTextAccuracy);
 
                     addHorisontalPoint(x, value);
                 }
@@ -368,7 +374,7 @@
                 // Добавление по значениям шкал
                 for (const xBasePoint of config.image.scales.xScaleValues) {
                     const x = scaleCoords(xBasePoint, 0, scales.func, scales.image).x;
-                    const value = xBasePoint.toFixed(2);
+                    const value = xBasePoint.toFixed(config.image.scales.xScaleTextAccuracy);
 
                     addHorisontalPoint(x, value);
                 }
@@ -382,7 +388,7 @@
                 // Добавление по количеству штрихов
                 for (let i = 0; i < config.image.scales.yPoints; i++) {
                     const y = yPointPart * i;
-                    const value = scaleCoords(0, y, scales.image, scales.func).y.toFixed(2);
+                    const value = scaleCoords(0, y, scales.image, scales.func).y.toFixed(config.image.scales.yScaleTextAccuracy);
 
                     addVerticalPoint(y, value);
                 }
@@ -390,7 +396,7 @@
                 // Добавление по значениям шкал
                 for (const yBasePoint of config.image.scales.yScaleValues) {
                     const y = scaleCoords(0, yBasePoint, scales.func, scales.image).y;
-                    const value = yBasePoint.toFixed(2);
+                    const value = yBasePoint.toFixed(config.image.scales.yScaleTextAccuracy);
 
                     addVerticalPoint(y, value);
                 }
