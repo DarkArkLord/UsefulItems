@@ -1,4 +1,4 @@
-export const HTMLTags = {
+const HTMLTags = {
     Table: 'table',
     TableRow: 'tr',
     TableData: 'td',
@@ -38,7 +38,7 @@ function render_v1(item) {
     return element;
 }
 
-export function render_v2(tag, attributes, ...childs) {
+function render_v2(tag, attributes, ...childs) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
@@ -71,7 +71,7 @@ export function render_v2(tag, attributes, ...childs) {
     return element;
 }
 
-export const SVGTags = {
+const SVGTags = {
     SVG: 'svg',
     Group: 'g',
     Line: 'line',
@@ -105,7 +105,7 @@ function renderSVG_v1(item) {
     return element;
 }
 
-export function renderSVG_v2(tag, attributes, ...childs) {
+function renderSVG_v2(tag, attributes, ...childs) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
