@@ -48,18 +48,18 @@
 
     const imageConfig = {
         image: {
-            hideValuesOutOfBorders: false,
+            hideValuesOutOfBorders: true,
             size: {
                 full: { height: 700, width: 900, },
                 client: { height: 600, width: 800, },
             },
             textSize: { width: 9.6, height: 18 },
             scales: {
-                dynamicScales: true,
-                xPoints: 10,
-                yPoints: 10,
-                xScaleValues: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10],
-                yScaleValues: [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10],
+                dynamicScales: false,
+                xPoints: undefined,
+                yPoints: undefined,
+                xScaleValues: [2, 3, 4, 5, 6, 7, 8,],
+                yScaleValues: [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7,],
                 xText: 'X',
                 yText: 'P',
             },
@@ -144,9 +144,9 @@
         // Границы всего картинки
         const imageBorderElement = generateImageBorderElement(config.image.size.full);
 
-        // Линии-стрелки шкал
+        // Линии шкал
         const scaleLines = generateScaleLines(config.image.size.client);
-        // Настройка шкал
+        // Метки шкал
         const scaleScales = generateScaleScales();
 
         // Линии графиков
@@ -176,22 +176,41 @@
             };
 
             if (config.image.scales.dynamicScales) {
+                setBaseScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
             } else if (config.image.hideValuesOutOfBorders) {
+                setBaseScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
             } else {
+                setBaseScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
+                updScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
             }
 
             return scales;
 
-            function updScalesByGraphValues(v, h) {
+            // Установка начальных значений
+            // По значениям графиков
+            function setBaseScalesByGraphValues(v, h) {
                 h.min = h.max = config.lines?.[0]?.values?.[0]?.x ?? 0;
                 h.size = h.max - h.min;
 
                 v.min = v.max = config.lines?.[0]?.values?.[0]?.y ?? 0;
                 v.size = v.max - v.min;
+            }
 
+            // По значениям шкал
+            function setBaseScalesByScalesValues(v, h) {
+                h.min = h.max = config.image.scales?.xScaleValues?.[0] ?? 0;
+                h.size = h.max - h.min;
+
+                v.min = v.max = config.image.scales?.yScaleValues?.[0] ?? 0;
+                v.size = v.max - v.min;
+            }
+
+            // Поиск минимальных и максимальных значений
+            // По значениям графиков
+            function updScalesByGraphValues(v, h) {
                 for (const line of config.lines) {
                     for (const value of line.values) {
                         if (value.x < h.min) {
@@ -213,13 +232,8 @@
                 }
             }
 
+            // По значениям шкал
             function updScalesByScalesValues(v, h) {
-                h.min = h.max = config.image.scales?.xScaleValues?.[0] ?? 0;
-                h.size = h.max - h.min;
-
-                v.min = v.max = config.image.scales?.yScaleValues?.[0] ?? 0;
-                v.size = v.max - v.min;
-
                 for (const value of config.image.scales.xScaleValues) {
                     if (value < h.min) {
                         h.min = value;
@@ -341,16 +355,6 @@
                     textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
                 }
 
-                // Метка шкалы Х
-                const hLablePosX = config.image.size.client.width - config.image.textSize.width;
-                const hLablePosY = -config.image.textSize.height * 1.5;
-                const hLablePos = convertCoords(hLablePosX, hLablePosY);
-                textElements.push(renderSVG(
-                    SVGTags.Text,
-                    { x: hLablePos.x, y: hLablePos.y, comment: 'Main X label' },
-                    config.image.scales.xText,
-                ));
-
                 // Вертикальные
                 for (let i = 0; i < config.image.scales.yPoints; i++) {
                     const tempY = yPointPart * i;
@@ -367,19 +371,43 @@
                     // Текстовые метки
                     textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
                 }
-
-                // Метка шкалы Y
-                const vLablePosX = -(config.image.textSize.width + pointSize * 2);
-                const vLablePosY = config.image.size.client.height - config.image.textSize.height;
-                const vLablePos = convertCoords(vLablePosX, vLablePosY);
-                textElements.push(renderSVG(
-                    SVGTags.Text,
-                    { x: vLablePos.x, y: vLablePos.y, comment: 'Main Y label' },
-                    config.image.scales.yText,
-                ));
             } else {
-                //
+                // Горизонтальные
+                for (const xBasePoint of config.image.scales.xScaleValues) {
+                    const tempX = scaleCoords(xBasePoint, 0, scales.func, scales.image).x;
+
+                    // Сетка
+                    gridElements.push(createLine(tempX, 0, tempX, config.image.size.client.height));
+                    // Черта
+                    pointsElements.push(createLine(tempX, -pointSize, tempX, pointSize));
+
+                    const funcValue = xBasePoint.toFixed(2);
+                    const valWidth = funcValue.toString().length * config.image.textSize.width;
+                    const funcPos = convertCoords(tempX - valWidth / 2, -config.image.textSize.height * 1.5);
+
+                    // Текстовые метки
+                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                }
+
+                // Вертикальные
+                for (const yBasePoint of config.image.scales.yScaleValues) {
+                    const tempY = scaleCoords(0, yBasePoint, scales.func, scales.image).y;
+
+                    // Сетка
+                    gridElements.push(createLine(0, tempY, config.image.size.client.width, tempY));
+                    // Черта
+                    pointsElements.push(createLine(-pointSize, tempY, pointSize, tempY));
+
+                    const funcValue = yBasePoint.toFixed(2);
+                    const valWidth = funcValue.toString().length * config.image.textSize.width;
+                    const funcPos = convertCoords(- (valWidth + pointSize * 2), tempY - (config.image.textSize.height / 4));
+
+                    // Текстовые метки
+                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                }
             }
+
+            addMainLineLabels();
 
             const gridGroupElement = renderSVG(
                 SVGTags.Group,
@@ -404,6 +432,28 @@
                 pointsGroupElement,
                 textGroupElement,
             );
+
+            function addMainLineLabels() {
+                // Метка шкалы Х
+                const hLablePosX = config.image.size.client.width - config.image.textSize.width;
+                const hLablePosY = -config.image.textSize.height * 1.5;
+                const hLablePos = convertCoords(hLablePosX, hLablePosY);
+                textElements.push(renderSVG(
+                    SVGTags.Text,
+                    { x: hLablePos.x, y: hLablePos.y, comment: 'Main X label' },
+                    config.image.scales.xText,
+                ));
+
+                // Метка шкалы Y
+                const vLablePosX = -(config.image.textSize.width + pointSize * 2);
+                const vLablePosY = config.image.size.client.height - config.image.textSize.height;
+                const vLablePos = convertCoords(vLablePosX, vLablePosY);
+                textElements.push(renderSVG(
+                    SVGTags.Text,
+                    { x: vLablePos.x, y: vLablePos.y, comment: 'Main Y label' },
+                    config.image.scales.yText,
+                ));
+            }
         }
 
         // Генерирование линий графиков
