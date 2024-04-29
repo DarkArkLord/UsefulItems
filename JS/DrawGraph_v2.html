@@ -47,41 +47,68 @@
     };
 
     const imageConfig = {
+        // Настройки изображения
         image: {
+            // Настройка размера
             size: {
+                // Ширина картинки
                 width: 900,
+                // Высота картинки
                 height: 700,
+                // Свободное место по горизонтали
                 widthOffset: 200,
+                // Свободное место по вертикали
                 heightOffset: 100,
             },
-            textSize: { width: 9.6, height: 12 },
+            // Размер текста (подбирается вручную для шрифта)
+            text: { width: 9.6, height: 12, font: '"Courier New", Courier, monospace' },
+            // Настройка шкал
             scales: {
+                // Динамическая генерация горизонтальной шкалы
                 dynamicScalesX: false,
+                // Динамическая генерация вертикальной шкалы
                 dynamicScalesY: false,
+                // Сокрытие чатей графиков, выходящих за рамки шкал (для НЕ динамической генерации)
                 hideValuesOutOfScales: true,
 
+                // Количество точек на горизонтальной шкале (для динамической генерации)
                 xPoints: 10,
+                // Количество точек на вертикальной шкале (для динамической генерации)
                 yPoints: 10,
 
+                // Значения на горизонтальной шкале (для НЕ динамической генерации)
                 xScaleValues: [0, 2, 3, 4, 5, 6, 7, 8,],
+                // Значения на вертикальной шкале (для НЕ динамической генерации)
                 yScaleValues: [-8, -6, -4, -2, 0, 2, 4, 6, 8,],
 
+                // Точность (цифр после запятой) для подписей горизонтальной шкалы
                 xScaleTextAccuracy: 2,
+                // Точность (цифр после запятой) для подписей вертикальной шкалы
                 yScaleTextAccuracy: 2,
 
+                // Название горизонтальной шкалы
                 xText: 'X',
+                // Название вертикальной шкалы
                 yText: 'Y',
             },
+            // Настройка цветов
             colors: {
+                // Границы изображения
                 imageBorder: 'black',
+                // Линии шкал
                 scales: 'rgb(27, 27, 27)',
+                // Сетка шкал
                 scaleGrid: 'gray',
+                // Текст
                 text: 'black',
             },
         },
+        // Данные графиков
         lines: [
             {
+                // Набор точек линии в формате {x, y}
                 values: valuesGenerators.values1(),
+                // Цвет линии
                 color: 'rgb(255, 0, 0)'
             },
             {
@@ -402,6 +429,7 @@
                 }
             }
 
+            // Добавление подписей шкал
             addMainLineLabels();
 
             const gridGroupElement = renderSVG(
@@ -416,7 +444,7 @@
             );
             const textGroupElement = renderSVG(
                 SVGTags.Group,
-                { fill: config.image.colors.text, ['font-family']: '"Courier New", Courier, monospace', comment: 'Text', },
+                { fill: config.image.colors.text, ['font-family']: config.image.text.font, comment: 'Text', },
                 ...textElements,
             );
 
@@ -428,10 +456,11 @@
                 textGroupElement,
             );
 
+            // Добавление подписей шкал
             function addMainLineLabels() {
                 // Метка шкалы Х
-                const hLablePosX = clientSize.width + config.image.textSize.width;
-                const hLablePosY = -config.image.textSize.height / 2;
+                const hLablePosX = clientSize.width + config.image.text.width;
+                const hLablePosY = -config.image.text.height / 2;
                 const hLablePos = convertCoords(hLablePosX, hLablePosY);
                 textElements.push(renderSVG(
                     SVGTags.Text,
@@ -440,8 +469,8 @@
                 ));
 
                 // Метка шкалы Y
-                const vLablePosX = -config.image.textSize.width / 2;
-                const vLablePosY = clientSize.height + config.image.textSize.height;
+                const vLablePosX = -config.image.text.width / 2;
+                const vLablePosY = clientSize.height + config.image.text.height;
                 const vLablePos = convertCoords(vLablePosX, vLablePosY);
                 textElements.push(renderSVG(
                     SVGTags.Text,
@@ -450,27 +479,29 @@
                 ));
             }
 
+            // Добавление точки, сетки и подписи на горизонтальной шкале
             function addHorisontalPoint(x, value) {
                 // Сетка
                 gridElements.push(createLine(x, 0, x, clientSize.height));
                 // Черта
                 pointsElements.push(createLine(x, -pointSize, x, pointSize));
 
-                const valWidth = value.toString().length * config.image.textSize.width;
-                const funcPos = convertCoords(x - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
+                const valWidth = value.toString().length * config.image.text.width;
+                const funcPos = convertCoords(x - valWidth / 2, -(config.image.text.height + pointSize * 2));
 
                 // Текстовые метки
                 textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, value));
             }
 
+            // Добавление точки, сетки и подписи на вертикальной шкале
             function addVerticalPoint(y, value) {
                 // Сетка
                 gridElements.push(createLine(0, y, clientSize.width, y));
                 // Черта
                 pointsElements.push(createLine(-pointSize, y, pointSize, y));
 
-                const valWidth = value.toString().length * config.image.textSize.width;
-                const funcPos = convertCoords(- (valWidth + pointSize * 2), y - (config.image.textSize.height / 4));
+                const valWidth = value.toString().length * config.image.text.width;
+                const funcPos = convertCoords(- (valWidth + pointSize * 2), y - (config.image.text.height / 4));
 
                 // Текстовые метки
                 textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, value));
