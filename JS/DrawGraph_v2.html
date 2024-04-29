@@ -191,6 +191,8 @@
 
             // Установка начальных значений
             function setBaseScales(v, h) {
+                // Если динамически - то по графикам
+                // Иначе - по значениям шкалы
                 if (config.image.scales.dynamicScalesX) {
                     h.min = h.max = config.lines?.[0]?.values?.[0]?.x ?? 0;
                     h.size = h.max - h.min;
@@ -199,6 +201,8 @@
                     h.size = h.max - h.min;
                 }
 
+                // Если динамически - то по графикам
+                // Иначе - по значениям шкалы
                 if (config.image.scales.dynamicScalesY) {
                     v.min = v.max = config.lines?.[0]?.values?.[0]?.y ?? 0;
                     v.size = v.max - v.min;
@@ -212,9 +216,11 @@
             function updScales(v, h) {
                 const sConf = config.image.scales;
 
+                // Поиск минимальных и максимальных значений по значениям графиков
                 if (sConf.dynamicScalesX || sConf.dynamicScalesY || !sConf.hideValuesOutOfScales) {
                     for (const line of config.lines) {
                         for (const value of line.values) {
+                            // Горизонтальная
                             if (sConf.dynamicScalesX || !sConf.hideValuesOutOfScales) {
                                 if (value.x < h.min) {
                                     h.min = value.x;
@@ -225,6 +231,7 @@
                                 }
                             }
 
+                            // Вертикальная
                             if (sConf.dynamicScalesY || !sConf.hideValuesOutOfScales) {
                                 if (value.y < v.min) {
                                     v.min = value.y;
@@ -238,6 +245,8 @@
                     }
                 }
 
+                // Поиск минимальных и максимальных значений по значениям шкал
+                // Горизонтальная
                 if (!sConf.dynamicScalesX) {
                     for (const value of sConf.xScaleValues) {
                         if (value < h.min) {
@@ -250,6 +259,7 @@
                     }
                 }
 
+                // Вертикальная
                 if (!sConf.dynamicScalesY) {
                     for (const value of sConf.yScaleValues) {
                         if (value < v.min) {
@@ -342,81 +352,47 @@
 
             const pointSize = 5;
 
+            // Горизонтальные
             if (config.image.scales.dynamicScalesX) {
                 // Размер частей динамических шкал
                 const xPointPart = clientSize.width / config.image.scales.xPoints;
 
-                // Горизонтальные
+                // Добавление по количеству штрихов
                 for (let i = 0; i < config.image.scales.xPoints; i++) {
-                    const tempX = xPointPart * i;
+                    const x = xPointPart * i;
+                    const value = scaleCoords(x, 0, scales.image, scales.func).x.toFixed(2);
 
-                    // Сетка
-                    gridElements.push(createLine(tempX, 0, tempX, clientSize.height));
-                    // Черта
-                    pointsElements.push(createLine(tempX, -pointSize, tempX, pointSize));
-
-                    const funcValue = scaleCoords(tempX, 0, scales.image, scales.func).x.toFixed(2);
-                    const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(tempX - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
-
-                    // Текстовые метки
-                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                    addHorisontalPoint(x, value);
                 }
             } else {
-                // Горизонтальные
+                // Добавление по значениям шкал
                 for (const xBasePoint of config.image.scales.xScaleValues) {
-                    const tempX = scaleCoords(xBasePoint, 0, scales.func, scales.image).x;
+                    const x = scaleCoords(xBasePoint, 0, scales.func, scales.image).x;
+                    const value = xBasePoint.toFixed(2);
 
-                    // Сетка
-                    gridElements.push(createLine(tempX, 0, tempX, clientSize.height));
-                    // Черта
-                    pointsElements.push(createLine(tempX, -pointSize, tempX, pointSize));
-
-                    const funcValue = xBasePoint.toFixed(2);
-                    const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(tempX - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
-
-                    // Текстовые метки
-                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                    addHorisontalPoint(x, value);
                 }
             }
 
+            // Вертикальные
             if (config.image.scales.dynamicScalesY) {
                 // Размер частей динамических шкал
                 const yPointPart = clientSize.height / config.image.scales.yPoints;
 
-                // Вертикальные
+                // Добавление по количеству штрихов
                 for (let i = 0; i < config.image.scales.yPoints; i++) {
-                    const tempY = yPointPart * i;
+                    const y = yPointPart * i;
+                    const value = scaleCoords(0, y, scales.image, scales.func).y.toFixed(2);
 
-                    // Сетка
-                    gridElements.push(createLine(0, tempY, clientSize.width, tempY));
-                    // Черта
-                    pointsElements.push(createLine(-pointSize, tempY, pointSize, tempY));
-
-                    const funcValue = scaleCoords(0, tempY, scales.image, scales.func).y.toFixed(2);
-                    const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(- (valWidth + pointSize * 2), tempY - (config.image.textSize.height / 4));
-
-                    // Текстовые метки
-                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                    addVerticalPoint(y, value);
                 }
             } else {
-                // Вертикальные
+                // Добавление по значениям шкал
                 for (const yBasePoint of config.image.scales.yScaleValues) {
-                    const tempY = scaleCoords(0, yBasePoint, scales.func, scales.image).y;
+                    const y = scaleCoords(0, yBasePoint, scales.func, scales.image).y;
+                    const value = yBasePoint.toFixed(2);
 
-                    // Сетка
-                    gridElements.push(createLine(0, tempY, clientSize.width, tempY));
-                    // Черта
-                    pointsElements.push(createLine(-pointSize, tempY, pointSize, tempY));
-
-                    const funcValue = yBasePoint.toFixed(2);
-                    const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(- (valWidth + pointSize * 2), tempY - (config.image.textSize.height / 4));
-
-                    // Текстовые метки
-                    textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
+                    addVerticalPoint(y, value);
                 }
             }
 
@@ -466,6 +442,32 @@
                     { x: vLablePos.x, y: vLablePos.y, comment: 'Main Y label' },
                     config.image.scales.yText,
                 ));
+            }
+
+            function addHorisontalPoint(x, value) {
+                // Сетка
+                gridElements.push(createLine(x, 0, x, clientSize.height));
+                // Черта
+                pointsElements.push(createLine(x, -pointSize, x, pointSize));
+
+                const valWidth = value.toString().length * config.image.textSize.width;
+                const funcPos = convertCoords(x - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
+
+                // Текстовые метки
+                textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, value));
+            }
+
+            function addVerticalPoint(y, value) {
+                // Сетка
+                gridElements.push(createLine(0, y, clientSize.width, y));
+                // Черта
+                pointsElements.push(createLine(-pointSize, y, pointSize, y));
+
+                const valWidth = value.toString().length * config.image.textSize.width;
+                const funcPos = convertCoords(- (valWidth + pointSize * 2), y - (config.image.textSize.height / 4));
+
+                // Текстовые метки
+                textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, value));
             }
         }
 
