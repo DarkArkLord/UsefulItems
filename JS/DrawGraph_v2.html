@@ -15,7 +15,7 @@
         values1: () => {
             let res = [];
             for (let i = 0; i < 12; i++) {
-                res.push({ x: i - 2, y: (i % 2 == 0 ? 1 : -1) * i });
+                res.push({ x: i, y: (i % 2 == 0 ? 1 : -1) * i });
             }
             res.push({ x: 9.5, y: 0 });
             return res;
@@ -23,14 +23,14 @@
         values2: () => {
             let res = [];
             for (let i = 0; i < 12; i++) {
-                res.push({ x: i - 2, y: (i % 2 == 0 ? -1 : 1) * i });
+                res.push({ x: i, y: (i % 2 == 0 ? -1 : 1) * i });
             }
             res.push({ x: 9.5, y: 0 });
             return res;
         },
         values3: () => {
             let res = [];
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 12; i++) {
                 res.push({ x: i, y: 0.5 });
                 res.push({ x: i + 0.5, y: -0.5 });
             }
@@ -38,7 +38,7 @@
         },
         values4: () => {
             let res = [];
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 12; i++) {
                 res.push({ x: i, y: -0.5 });
                 res.push({ x: i + 0.5, y: 0.5 });
             }
@@ -65,7 +65,7 @@
             // Настройка шкал
             scales: {
                 // Динамическая генерация горизонтальной шкалы
-                dynamicScalesX: false,
+                dynamicScalesX: true,
                 // Динамическая генерация вертикальной шкалы
                 dynamicScalesY: false,
                 // Сокрытие чатей графиков, выходящих за рамки шкал (для НЕ динамической генерации)
@@ -391,7 +391,7 @@
                 const xPointPart = clientSize.width / config.image.scales.xPoints;
 
                 // Добавление по количеству штрихов
-                for (let i = 0; i < config.image.scales.xPoints; i++) {
+                for (let i = 0; i <= config.image.scales.xPoints; i++) {
                     const x = xPointPart * i;
                     const value = scaleCoords(x, 0, scales.image, scales.func).x.toFixed(config.image.scales.xScaleTextAccuracy);
 
@@ -413,7 +413,7 @@
                 const yPointPart = clientSize.height / config.image.scales.yPoints;
 
                 // Добавление по количеству штрихов
-                for (let i = 0; i < config.image.scales.yPoints; i++) {
+                for (let i = 0; i <= config.image.scales.yPoints; i++) {
                     const y = yPointPart * i;
                     const value = scaleCoords(0, y, scales.image, scales.func).y.toFixed(config.image.scales.yScaleTextAccuracy);
 
