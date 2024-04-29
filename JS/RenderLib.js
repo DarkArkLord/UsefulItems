@@ -1,4 +1,4 @@
-const HTMLTags = {
+export const HTMLTags = {
     Table: 'table',
     TableRow: 'tr',
     TableData: 'td',
@@ -13,12 +13,11 @@ function render_V1(item) {
         return item.element;
     }
 
-    let element = document.createElement(item.tag);
-    item.element = element;
+    const element = item.element = document.createElement(item.tag);
 
     if (item.attributes) {
-        for (let name in item.attributes) {
-            let value = item.attributes[name];
+        for (const name in item.attributes) {
+            const value = item.attributes[name];
             element.setAttribute(name, value);
         }
     }
@@ -28,7 +27,7 @@ function render_V1(item) {
     }
 
     if (item.childs) {
-        for (let child of item.childs) {
+        for (const child of item.childs) {
             if (!child.element) {
                 render_V1(child);
             }
@@ -44,7 +43,7 @@ export function render_V2(tag, attributes, ...childs) {
         return tag(attributes, ...childs);
     }
 
-    let element = document.createElement(tag);
+    const element = document.createElement(tag);
 
     if (attributes) {
         for (const name in attributes) {
@@ -62,8 +61,8 @@ export function render_V2(tag, attributes, ...childs) {
             } else {
                 parent.appendChild(
                     child instanceof HTMLElement
-                    ? child
-                    : document.createTextNode(child)
+                        ? child
+                        : document.createTextNode(child)
                 );
             }
         })(element, child);
@@ -72,7 +71,7 @@ export function render_V2(tag, attributes, ...childs) {
     return element;
 }
 
-const SVGTags = {
+export const SVGTags = {
     SVG: 'svg',
     Group: 'g',
     Line: 'line',
@@ -80,14 +79,14 @@ const SVGTags = {
     Text: 'text'
 }
 
-function renderSVG(item) {
+function renderSVG_v1(item) {
     if (item.element) {
         return item.element;
     }
-    let element = item.element = document.createElementNS('http://www.w3.org/2000/svg', item.tag);
+    const element = item.element = document.createElementNS('http://www.w3.org/2000/svg', item.tag);
     if (item.attributes) {
-        for (let name in item.attributes) {
-            let value = item.attributes[name];
+        for (const name in item.attributes) {
+            const value = item.attributes[name];
             element.setAttributeNS(null, name, value);
         }
     }
@@ -98,10 +97,43 @@ function renderSVG(item) {
         element.appendChild(item.innerElement);
     }
     if (item.childs) {
-        for (let child of item.childs) {
-            renderSVG(child);
+        for (const child of item.childs) {
+            renderSVG_v1(child);
             element.append(child.element);
         }
     }
+    return element;
+}
+
+export function renderSVG_V2(tag, attributes, ...childs) {
+    if (tag instanceof Function) {
+        return tag(attributes, ...childs);
+    }
+
+    const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
+
+    if (attributes) {
+        for (const name in attributes) {
+            const value = attributes[name];
+            element.setAttributeNS(null, name, value);
+        }
+    }
+
+    for (const child of childs) {
+        (function addChild(parent, child) {
+            if (Array.isArray(child)) {
+                for (const innerChild of child) {
+                    addChild(parent, innerChild);
+                }
+            } else {
+                parent.appendChild(
+                    child instanceof HTMLElement
+                        ? child
+                        : document.createTextNode(child)
+                );
+            }
+        })(element, child);
+    }
+
     return element;
 }
