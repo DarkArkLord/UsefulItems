@@ -55,7 +55,7 @@
             textSize: { width: 9.6, height: 18 },
             scales: {
                 dynamicScales: false,
-                hideValuesOutOfScales: !false,
+                hideValuesOutOfScales: true,
                 xPoints: undefined,
                 yPoints: undefined,
                 xScaleValues: [2, 3, 4, 5, 6, 7, 8,],
@@ -175,13 +175,21 @@
                 }
             };
 
+            // Если динамическая установка шкал 
+            // Клиентская область скалируется по значениям графиков
             if (config.image.scales.dynamicScales) {
                 setBaseScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
-            } else if (config.image.scales.hideValuesOutOfScales) {
+            }
+            // Если НЕ динамическая установка шкал и значения вне шкал скрываются
+            // Клиентская область скалируется по значениям шкал
+            else if (config.image.scales.hideValuesOutOfScales) {
                 setBaseScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
-            } else {
+            }
+            // Если НЕ динамическая установка шкал и значения вне шкал НЕ скрываются
+            // Клиентская область скалируется по значениям шкал и графиков
+            else {
                 setBaseScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
@@ -335,6 +343,7 @@
             const pointSize = 5;
 
             if (config.image.scales.dynamicScales) {
+                // Размер частей динамических шкал
                 const xPointPart = config.image.size.client.width / config.image.scales.xPoints;
                 const yPointPart = config.image.size.client.height / config.image.scales.yPoints;
 
@@ -576,8 +585,8 @@
 <!-- DRAW GRAPH -->
 <script>
     const imageContainer = document.getElementById('content-container');
-
     imageContainer.innerHTML = '';
+
     const img = generateSVG(imageConfig);
     imageContainer.appendChild(img);
 </script>
