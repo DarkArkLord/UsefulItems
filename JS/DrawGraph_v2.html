@@ -249,17 +249,20 @@
                     fill: 'none',
                     stroke: imageConfig.image.colors.imageBorder,
                     ['stroke-width']: '2px',
-                    points: [
+                    points: pointsToText([
                         { x: 0, y: 0 },
                         { x: size.width, y: 0 },
                         { x: size.width, y: size.height },
                         { x: 0, y: size.height },
                         { x: 0, y: 0 },
-                    ]
-                        .map(v => `${v.x}, ${v.y}`)
-                        .join(' '),
+                    ]),
                     comment: 'Image border',
                 });
+        }
+
+        // Маппинг списока точек в атрибут Polyline
+        function pointsToText(points) {
+            return points.map(v => `${v.x}, ${v.y}`).join(' ');
         }
 
         // Конвертирование координат
@@ -411,10 +414,10 @@
                 //
             } else {
                 for (const line of config.lines) {
-                    const points = line.values.map(value => scaleCoords(value.x, value.y, scales.func, scales.image))
-                        .map(value => convertCoords(value.x, value.y))
-                        .map(value => `${value.x}, ${value.y}`)
-                        .join(' ');
+                    const linePoints = line.values
+                        .map(value => scaleCoords(value.x, value.y, scales.func, scales.image))
+                        .map(value => convertCoords(value.x, value.y));
+                    const points = pointsToText(linePoints);
 
                     lines.push(renderSVG(SVGTags.Polyline, { fill: 'none', ['stroke-width']: '1px', stroke: line.color, points },));
                 }
