@@ -14,16 +14,16 @@
     const valuesGenerators = {
         values1: () => {
             let res = [];
-            for (let i = 0; i < 10; i++) {
-                res.push({ x: i, y: (i % 2 == 0 ? 1 : -1) * i });
+            for (let i = 0; i < 12; i++) {
+                res.push({ x: i - 2, y: (i % 2 == 0 ? 1 : -1) * i });
             }
             res.push({ x: 9.5, y: 0 });
             return res;
         },
         values2: () => {
             let res = [];
-            for (let i = 0; i < 10; i++) {
-                res.push({ x: i, y: (i % 2 == 0 ? -1 : 1) * i });
+            for (let i = 0; i < 12; i++) {
+                res.push({ x: i - 2, y: (i % 2 == 0 ? -1 : 1) * i });
             }
             res.push({ x: 9.5, y: 0 });
             return res;
@@ -48,7 +48,6 @@
 
     const imageConfig = {
         image: {
-            hideValuesOutOfBorders: true,
             size: {
                 full: { height: 700, width: 900, },
                 client: { height: 600, width: 800, },
@@ -56,6 +55,7 @@
             textSize: { width: 9.6, height: 18 },
             scales: {
                 dynamicScales: false,
+                hideValuesOutOfScales: true,
                 xPoints: undefined,
                 yPoints: undefined,
                 xScaleValues: [2, 3, 4, 5, 6, 7, 8,],
@@ -178,7 +178,7 @@
             if (config.image.scales.dynamicScales) {
                 setBaseScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByGraphValues(scales.func.vertical, scales.func.horizontal);
-            } else if (config.image.hideValuesOutOfBorders) {
+            } else if (config.image.scales.hideValuesOutOfScales) {
                 setBaseScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
                 updScalesByScalesValues(scales.func.vertical, scales.func.horizontal);
             } else {
@@ -460,8 +460,98 @@
         function generateGraphs() {
             const lines = [];
 
-            if (config.image.hideValuesOutOfBorders) {
-                //
+            if (config.image.scales.hideValuesOutOfScales) {
+                for (const line of config.lines) {
+                    // const linePoints = line.values
+                    //     .map(value => scaleCoords(value.x, value.y, scales.func, scales.image))
+                    //     .map(value => convertCoords(value.x, value.y));
+
+                    const segments = [];
+                    for (let i = 1; i < line.values.length; i++) {
+                        const segment = { a: line.values[i - 1], b: line.values[i] };
+                        const visible = clipSegment(
+                            segment,
+                            scales.func.horizontal.min,
+                            scales.func.horizontal.max,
+                            scales.func.vertical.min,
+                            scales.func.vertical.max
+                        );
+                        if (visible) {
+                            const scaledA = scaleCoords(segment.a.x, segment.a.y, scales.func, scales.image);
+                            const scaledB = scaleCoords(segment.b.x, segment.b.y, scales.func, scales.image);
+
+                            segments.push(createLine(scaledA.x, scaledA.y, scaledB.x, scaledB.y));
+                        }
+                    }
+
+                    lines.push(renderSVG(SVGTags.Group, { stroke: line.color, ['stroke-width']: '1px', }, ...segments));
+                }
+
+                // Функция обрезки
+                function clipSegment(s, minX, maxX, minY, maxY) {
+                    const codes = {
+                        a: getCodeKS(s.a),
+                        b: getCodeKS(s.b)
+                    };
+
+                    while (codes.a | codes.b) {
+                        // Отрезок полностью невидим
+                        if (codes.a & codes.b) {
+                            return false;
+                        }
+
+                        // Поменять местами точки отрезка
+                        if (codes.a == 0) {
+                            [s.a, s.b] = [s.b, s.a];
+                            [codes.a, codes.b] = [codes.b, codes.a];
+                        }
+
+                        // Смещение отрезка
+                        // Точка А левее областивидимости
+                        if (codes.a & 1) {
+                            s.a.y = s.a.y + (s.b.y - s.a.y) * (minX - s.a.x) / (s.b.x - s.a.x);
+                            s.a.x = minX;
+                        }
+                        // точка A правее области видимости
+                        else if (codes.a & 2) {
+                            s.a.y = s.a.y + (s.b.y - s.a.y) * (maxX - s.a.x) / (s.b.x - s.a.x);
+                            s.a.x = maxX;
+                        }
+                        // точка A ниже области видимости
+                        else if (codes.a & 4) {
+                            s.a.x = s.a.x + (s.b.x - s.a.x) * (minY - s.a.y) / (s.b.y - s.a.y);
+                            s.a.y = minY;
+                        }
+                        // точка A выше области видимости
+                        else {
+                            s.a.x = s.a.x + (s.b.x - s.a.x) * (maxY - s.a.y) / (s.b.y - s.a.y);
+                            s.a.y = maxY;
+                        }
+
+                        codes.a = getCodeKS(s.a);
+                    }
+
+                    return true;
+
+                    // Вычисление кода точки
+                    function getCodeKS(point) {
+                        let code = 0;
+
+                        if (point.x < minX) {
+                            code += 1;
+                        } else if (point.x > maxX) {
+                            code += 2;
+                        }
+
+                        if (point.y < minY) {
+                            code += 4;
+                        } else if (point.y > maxY) {
+                            code += 8;
+                        }
+
+                        return code;
+                    }
+                }
             } else {
                 for (const line of config.lines) {
                     const linePoints = line.values
