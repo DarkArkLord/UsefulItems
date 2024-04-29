@@ -55,7 +55,7 @@
             textSize: { width: 9.6, height: 18 },
             scales: {
                 dynamicScales: false,
-                hideValuesOutOfScales: true,
+                hideValuesOutOfScales: !false,
                 xPoints: undefined,
                 yPoints: undefined,
                 xScaleValues: [2, 3, 4, 5, 6, 7, 8,],
@@ -462,13 +462,9 @@
 
             if (config.image.scales.hideValuesOutOfScales) {
                 for (const line of config.lines) {
-                    // const linePoints = line.values
-                    //     .map(value => scaleCoords(value.x, value.y, scales.func, scales.image))
-                    //     .map(value => convertCoords(value.x, value.y));
-
                     const segments = [];
                     for (let i = 1; i < line.values.length; i++) {
-                        const segment = { a: line.values[i - 1], b: line.values[i] };
+                        const segment = copy({ a: line.values[i - 1], b: line.values[i] });
                         const visible = clipSegment(
                             segment,
                             scales.func.horizontal.min,
@@ -487,7 +483,7 @@
                     lines.push(renderSVG(SVGTags.Group, { stroke: line.color, ['stroke-width']: '1px', }, ...segments));
                 }
 
-                // Функция обрезки
+                // Функция обрезки (Алгоритм Коэна-Сазерленда)
                 function clipSegment(s, minX, maxX, minY, maxY) {
                     const codes = {
                         a: getCodeKS(s.a),
@@ -568,6 +564,11 @@
                 { comment: 'Graphs' },
                 ...lines,
             );
+        }
+
+        // Копирование данных
+        function copy(value) {
+            return JSON.parse(JSON.stringify(value));
         }
     }
 </script>
