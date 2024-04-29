@@ -49,19 +49,21 @@
     const imageConfig = {
         image: {
             size: {
-                full: { height: 700, width: 900, },
-                client: { height: 600, width: 800, },
+                width: 900,
+                height: 700,
+                widthOffset: 200,
+                heightOffset: 100,
             },
-            textSize: { width: 9.6, height: 18 },
+            textSize: { width: 9.6, height: 12 },
             scales: {
                 dynamicScales: false,
                 hideValuesOutOfScales: true,
                 xPoints: undefined,
                 yPoints: undefined,
-                xScaleValues: [2, 3, 4, 5, 6, 7, 8,],
-                yScaleValues: [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7,],
+                xScaleValues: [0, 2, 3, 4, 5, 6, 7, 8,],
+                yScaleValues: [-8, -6, -4, -2, 0, 2, 4, 6, 8,],
                 xText: 'X',
-                yText: 'P',
+                yText: 'Y',
             },
             colors: {
                 imageBorder: 'black',
@@ -138,14 +140,20 @@
 <!-- MAIN IMAGE GENERATING FUNCTION -->
 <script>
     function generateSVG(config = imageConfig) {
+        // Расчет размера клиентской области
+        const clientSize = {
+            width: config.image.size.width - config.image.size.widthOffset,
+            height: config.image.size.height - config.image.size.heightOffset,
+        };
+
         // Для масштабирования графиков к изображению
         const scales = generateImageScalingConfig();
 
         // Границы всего картинки
-        const imageBorderElement = generateImageBorderElement(config.image.size.full);
+        const imageBorderElement = generateImageBorderElement();
 
         // Линии шкал
-        const scaleLines = generateScaleLines(config.image.size.client);
+        const scaleLines = generateScaleLines();
         // Метки шкал
         const scaleScales = generateScaleScales();
 
@@ -155,7 +163,7 @@
         // Создание изображения
         return renderSVG(
             SVGTags.SVG,
-            { height: config.image.size.full.height, width: config.image.size.full.width, },
+            { height: config.image.size.height, width: config.image.size.width, },
             imageBorderElement,
             scaleLines,
             scaleScales,
@@ -170,8 +178,8 @@
                     vertical: { min: 0, max: 0, size: 0 },
                 },
                 image: {
-                    horizontal: { min: 0, max: config.image.size.client.width, size: config.image.size.client.width },
-                    vertical: { min: 0, max: config.image.size.client.height, size: config.image.size.client.height },
+                    horizontal: { min: 0, max: clientSize.width, size: clientSize.width },
+                    vertical: { min: 0, max: clientSize.height, size: clientSize.height },
                 }
             };
 
@@ -265,7 +273,7 @@
         }
 
         // Генерация границ картинки
-        function generateImageBorderElement(size) {
+        function generateImageBorderElement() {
             return renderSVG(SVGTags.Polyline,
                 {
                     fill: 'none',
@@ -273,9 +281,9 @@
                     ['stroke-width']: '2px',
                     points: pointsToText([
                         { x: 0, y: 0 },
-                        { x: size.width, y: 0 },
-                        { x: size.width, y: size.height },
-                        { x: 0, y: size.height },
+                        { x: config.image.size.width, y: 0 },
+                        { x: config.image.size.width, y: config.image.size.height },
+                        { x: 0, y: config.image.size.height },
                         { x: 0, y: 0 },
                     ]),
                     comment: 'Image border',
@@ -291,8 +299,8 @@
         function convertCoords(x, y) {
             const offset = 5;
             return {
-                x: x + (config.image.size.full.width - config.image.size.client.width) - offset,
-                y: config.image.size.client.height - y + offset
+                x: x + (config.image.size.width - clientSize.width) / 2 - offset,
+                y: clientSize.height + config.image.size.heightOffset / 2 - y + offset
             };
         }
 
@@ -304,7 +312,7 @@
         }
 
         // Генерация линий шкал
-        function generateScaleLines(size) {
+        function generateScaleLines() {
             const arrowOffset = 5;
             return renderSVG(
                 SVGTags.Group,
@@ -314,15 +322,15 @@
                     comment: 'Scale lines and arrows'
                 },
                 // Горизонтальная линия
-                createLine(0, 0, size.width, 0),
+                createLine(0, 0, clientSize.width, 0),
                 // Горизонтальная стрелка
-                createLine(size.width, 0, size.width - arrowOffset, arrowOffset),
-                createLine(size.width, 0, size.width - arrowOffset, -arrowOffset),
+                createLine(clientSize.width, 0, clientSize.width - arrowOffset, arrowOffset),
+                createLine(clientSize.width, 0, clientSize.width - arrowOffset, -arrowOffset),
                 // Вертикальная линия
-                createLine(0, 0, 0, size.height),
+                createLine(0, 0, 0, clientSize.height),
                 // Вертикальная стрелка
-                createLine(0, size.height, arrowOffset, size.height - arrowOffset),
-                createLine(0, size.height, -arrowOffset, size.height - arrowOffset),
+                createLine(0, clientSize.height, arrowOffset, clientSize.height - arrowOffset),
+                createLine(0, clientSize.height, -arrowOffset, clientSize.height - arrowOffset),
             )
         }
 
@@ -344,21 +352,21 @@
 
             if (config.image.scales.dynamicScales) {
                 // Размер частей динамических шкал
-                const xPointPart = config.image.size.client.width / config.image.scales.xPoints;
-                const yPointPart = config.image.size.client.height / config.image.scales.yPoints;
+                const xPointPart = clientSize.width / config.image.scales.xPoints;
+                const yPointPart = clientSize.height / config.image.scales.yPoints;
 
                 // Горизонтальные
                 for (let i = 0; i < config.image.scales.xPoints; i++) {
                     const tempX = xPointPart * i;
 
                     // Сетка
-                    gridElements.push(createLine(tempX, 0, tempX, config.image.size.client.height));
+                    gridElements.push(createLine(tempX, 0, tempX, clientSize.height));
                     // Черта
                     pointsElements.push(createLine(tempX, -pointSize, tempX, pointSize));
 
                     const funcValue = scaleCoords(tempX, 0, scales.image, scales.func).x.toFixed(2);
                     const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(tempX - valWidth / 2, -config.image.textSize.height * 1.5);
+                    const funcPos = convertCoords(tempX - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
 
                     // Текстовые метки
                     textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
@@ -369,7 +377,7 @@
                     const tempY = yPointPart * i;
 
                     // Сетка
-                    gridElements.push(createLine(0, tempY, config.image.size.client.width, tempY));
+                    gridElements.push(createLine(0, tempY, clientSize.width, tempY));
                     // Черта
                     pointsElements.push(createLine(-pointSize, tempY, pointSize, tempY));
 
@@ -386,13 +394,13 @@
                     const tempX = scaleCoords(xBasePoint, 0, scales.func, scales.image).x;
 
                     // Сетка
-                    gridElements.push(createLine(tempX, 0, tempX, config.image.size.client.height));
+                    gridElements.push(createLine(tempX, 0, tempX, clientSize.height));
                     // Черта
                     pointsElements.push(createLine(tempX, -pointSize, tempX, pointSize));
 
                     const funcValue = xBasePoint.toFixed(2);
                     const valWidth = funcValue.toString().length * config.image.textSize.width;
-                    const funcPos = convertCoords(tempX - valWidth / 2, -config.image.textSize.height * 1.5);
+                    const funcPos = convertCoords(tempX - valWidth / 2, -(config.image.textSize.height + pointSize * 2));
 
                     // Текстовые метки
                     textElements.push(renderSVG(SVGTags.Text, { x: funcPos.x, y: funcPos.y }, funcValue));
@@ -403,7 +411,7 @@
                     const tempY = scaleCoords(0, yBasePoint, scales.func, scales.image).y;
 
                     // Сетка
-                    gridElements.push(createLine(0, tempY, config.image.size.client.width, tempY));
+                    gridElements.push(createLine(0, tempY, clientSize.width, tempY));
                     // Черта
                     pointsElements.push(createLine(-pointSize, tempY, pointSize, tempY));
 
@@ -444,8 +452,8 @@
 
             function addMainLineLabels() {
                 // Метка шкалы Х
-                const hLablePosX = config.image.size.client.width - config.image.textSize.width;
-                const hLablePosY = -config.image.textSize.height * 1.5;
+                const hLablePosX = clientSize.width + config.image.textSize.width;
+                const hLablePosY = -config.image.textSize.height / 2;
                 const hLablePos = convertCoords(hLablePosX, hLablePosY);
                 textElements.push(renderSVG(
                     SVGTags.Text,
@@ -454,8 +462,8 @@
                 ));
 
                 // Метка шкалы Y
-                const vLablePosX = -(config.image.textSize.width + pointSize * 2);
-                const vLablePosY = config.image.size.client.height - config.image.textSize.height;
+                const vLablePosX = -config.image.textSize.width / 2;
+                const vLablePosY = clientSize.height + config.image.textSize.height;
                 const vLablePos = convertCoords(vLablePosX, vLablePosY);
                 textElements.push(renderSVG(
                     SVGTags.Text,
