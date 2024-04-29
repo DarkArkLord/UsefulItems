@@ -8,7 +8,7 @@ export const HTMLTags = {
     Div: 'div',
 }
 
-function render_V1(item) {
+function render_v1(item) {
     if (item.element) {
         return item.element;
     }
@@ -38,7 +38,7 @@ function render_V1(item) {
     return element;
 }
 
-export function render_V2(tag, attributes, ...childs) {
+export function render_v2(tag, attributes, ...childs) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
@@ -105,7 +105,7 @@ function renderSVG_v1(item) {
     return element;
 }
 
-export function renderSVG_V2(tag, attributes, ...childs) {
+export function renderSVG_v2(tag, attributes, ...childs) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
