@@ -72,10 +72,10 @@
                 // Количество точек на горизонтальной шкале (для динамической генерации)
                 xPoints: 10,
                 // Количество точек на вертикальной шкале (для динамической генерации)
-                yPoints: 10,
+                yPoints: undefined,
 
                 // Значения на горизонтальной шкале (для НЕ динамической генерации)
-                xScaleValues: [0, 2, 3, 4, 5, 6, 7, 8,],
+                xScaleValues: undefined,
                 // Значения на вертикальной шкале (для НЕ динамической генерации)
                 yScaleValues: [-8, -6, -4, -2, 0, 2, 4, 6, 8,],
 
@@ -172,6 +172,9 @@
 <!-- MAIN IMAGE GENERATING FUNCTION -->
 <script>
     function generateSVG(config = imageConfig) {
+        // Валидация корректности настроек
+        validateConfig();
+
         // Расчет размера клиентской области
         const clientSize = {
             width: config.image.size.width - config.image.size.widthOffset,
@@ -201,6 +204,40 @@
             scaleScales,
             graphs,
         );
+
+        // Валидация корректности настроек
+        function validateConfig() {
+            const size = config.image.size;
+            if (!size.width || !size.height || size.width < 1 || size.height < 1) {
+                throw Error(`Не корректно заполнен размер изображения (config.image.size.width и config.image.size.height)`);
+            }
+            if (!size.widthOffset || !size.heightOffset || size.widthOffset < 0 || size.heightOffset < 0) {
+                throw Error(`Не корректно заполнен размер свободного места (config.image.size.widthOffset и config.image.size.heightOffset)`);
+            }
+
+            const scales = config.image.scales;
+            if (scales.dynamicScalesX && (!scales.xPoints || scales.xPoints < 0)) {
+                throw Error(`Для динамической шкалы X (${scales.xText}) не корректно заполнено кличество делений (config.image.scales.xPoints)`);
+            }
+            if (scales.dynamicScalesY && (!scales.yPoints || scales.yPoints < 0)) {
+                throw Error(`Для динамической шкалы Y (${scales.yText}) не корректно заполнено кличество делений (config.image.scales.yPoints)`);
+            }
+
+            if (!scales.dynamicScalesX && !scales.xScaleValues?.length) {
+                throw Error(`Для НЕ динамической шкалы X (${scales.xText}) не заполнен список значений (config.image.scales.xScaleValues)`);
+            }
+            if (!scales.dynamicScalesY && !scales.yScaleValues?.length) {
+                throw Error(`Для НЕ динамической шкалы Y (${scales.yText}) не заполнен список значений (config.image.scales.yScaleValues)`);
+            }
+
+            if (scales.xScaleTextAccuracy < 0 || scales.yScaleTextAccuracy < 0) {
+                throw Error(`Некорректно заполнена точность подписей шкал (config.image.scales.xScaleTextAccuracy и config.image.scales.yScaleTextAccuracy)`);
+            }
+
+            if (!config.lines?.length) {
+                throw Error(`Не заполнен список графиков (config.lines)`);
+            }
+        }
 
         // Генерация размеров изобржения для масштабирования
         function generateImageScalingConfig() {
