@@ -17,7 +17,6 @@
             for (let i = 0; i < 12; i++) {
                 res.push({ x: i, y: (i % 2 == 0 ? 1 : -1) * i });
             }
-            res.push({ x: 9.5, y: 0 });
             return res;
         },
         values2: () => {
@@ -25,7 +24,6 @@
             for (let i = 0; i < 12; i++) {
                 res.push({ x: i, y: (i % 2 == 0 ? -1 : 1) * i });
             }
-            res.push({ x: 9.5, y: 0 });
             return res;
         },
         values3: () => {
@@ -69,7 +67,7 @@
                 // Динамическая генерация вертикальной шкалы
                 dynamicScalesY: false,
                 // Сокрытие чатей графиков, выходящих за рамки шкал (для НЕ динамической генерации)
-                hideValuesOutOfScales: true,
+                hideValuesOutOfScales: !true,
 
                 // Количество точек на горизонтальной шкале (для динамической генерации)
                 xPoints: 10,
