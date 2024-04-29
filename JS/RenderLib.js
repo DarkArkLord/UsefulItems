@@ -127,7 +127,7 @@ function renderSVG_v2(tag, attributes, ...childs) {
                 }
             } else {
                 parent.appendChild(
-                    child instanceof Number || child instanceof String
+                    typeof child == 'number' || typeof child == 'string'
                         ? document.createTextNode(child)
                         : child
                 );
