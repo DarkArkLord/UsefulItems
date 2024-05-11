@@ -60,9 +60,9 @@ function render_v2(tag, attributes, ...childs) {
                 }
             } else {
                 parent.appendChild(
-                    child instanceof HTMLElement
-                        ? child
-                        : document.createTextNode(child)
+                    typeof child == 'number' || typeof child == 'string'
+                        ? document.createTextNode(child)
+                        : child
                 );
             }
         })(element, child);
