@@ -1,4 +1,8 @@
-﻿namespace ConsoleUtilsCore
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleUtilsCore
 {
     public static class ConsoleInput
     {

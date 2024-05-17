@@ -1,4 +1,6 @@
-﻿namespace ConsoleTest
+﻿using System;
+
+namespace ConsoleTest
 {
     internal class Program
     {

@@ -1,4 +1,7 @@
-﻿namespace ConsoleUtilsCore
+﻿using System;
+using System.Linq;
+
+namespace ConsoleUtilsCore
 {
     public static class ConsoleUtils
     {

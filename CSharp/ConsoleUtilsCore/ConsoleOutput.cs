@@ -1,4 +1,6 @@
-﻿namespace ConsoleUtilsCore
+﻿using System;
+
+namespace ConsoleUtilsCore
 {
     public static class ConsoleOutput
     {
