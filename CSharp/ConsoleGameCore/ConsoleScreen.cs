@@ -116,4 +116,112 @@ namespace ConsoleGameCore
             return _text.ToString();
         }
     }
+
+
+    public static class ConsoleScreenTest
+    {
+        public static void Test()
+        {
+            Console.BufferHeight = Console.WindowHeight;
+            Console.BufferWidth = Console.WindowWidth;
+
+            ConsoleScreen screen = new ConsoleScreen(Console.WindowWidth, Console.WindowHeight);
+
+            int x1 = 0;
+            int y1 = 0;
+
+            int x2 = 0;
+            int y2 = 0;
+
+            DateTime? date = null;
+            var frameTime = 100;
+
+            while (true)
+            {
+                screen.Clear();
+
+                screen[x1, y1].Value = 'X';
+                screen[x1, y1].ForegroundColor = EConsoleColor.Red;
+
+                screen[x2, y2].BackgroundColor = EConsoleColor.Yellow;
+
+                screen.Draw();
+
+                var key = Console.ReadKey(true);
+
+                // X control
+                if (key.Key == ConsoleKey.LeftArrow && x1 > 0)
+                {
+                    x1 -= 1;
+                }
+                if (key.Key == ConsoleKey.RightArrow && x1 < screen.Width - 1)
+                {
+                    x1 += 1;
+                }
+
+                if (key.Key == ConsoleKey.UpArrow && y1 > 0)
+                {
+                    y1 -= 1;
+                }
+                if (key.Key == ConsoleKey.DownArrow && y1 < screen.Height - 1)
+                {
+                    y1 += 1;
+                }
+
+                // Yellow contol
+                if (key.Key == ConsoleKey.A && x2 > 0)
+                {
+                    x2 -= 1;
+                }
+                if (key.Key == ConsoleKey.D && x2 < screen.Width - 1)
+                {
+                    x2 += 1;
+                }
+
+                if (key.Key == ConsoleKey.W && y2 > 0)
+                {
+                    y2 -= 1;
+                }
+                if (key.Key == ConsoleKey.S && y2 < screen.Height - 1)
+                {
+                    y2 += 1;
+                }
+
+                // Exit
+                if (key.Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+
+                // FOR FRAME TIME
+                if (date == null)
+                {
+                    date = DateTime.Now;
+                }
+                else
+                {
+                    var tdate = DateTime.Now;
+                    var deltaTime = (tdate - date).Value.Milliseconds;
+
+                    while (deltaTime < frameTime)
+                    {
+                        tdate = DateTime.Now;
+                        deltaTime = (tdate - date).Value.Milliseconds;
+                    }
+
+                    date = tdate;
+                    //times.Add(deltaTime);
+                }
+
+                // Clear console buffer
+                while (Console.KeyAvailable)
+                {
+                    Console.ReadKey(true);
+                }
+            }
+
+            Console.Clear();
+            Console.WriteLine("\nend");
+        }
+    }
 }
