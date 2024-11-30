@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace HackUtilsCore
 {
-    public static class StringHack
+    public static class SafeStringHack
     {
         [StructLayout(LayoutKind.Explicit)]
         struct Writer
@@ -45,7 +45,7 @@ namespace HackUtilsCore
 
         public static void Test()
         {
-            // Old, no correct work
+            // Не работает корректно, изменяется не нулевой символ
 
             const string x = "azaza";
 
