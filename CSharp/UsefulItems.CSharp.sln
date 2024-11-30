@@ -12,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleUtilsCore", "Console
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackUtilsCore", "HackUtilsCore\HackUtilsCore.csproj", "{B9506B67-FBD2-40C0-A62D-130A62032EDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleGameCore", "ConsoleGameCore\ConsoleGameCore.csproj", "{788754C8-D5E1-40DD-A2D8-AA2709129D8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGameCore", "ConsoleGameCore\ConsoleGameCore.csproj", "{788754C8-D5E1-40DD-A2D8-AA2709129D8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockingLib", "MockingLib\MockingLib.csproj", "{9DCCFB1D-80FF-45F5-9753-DCB4ACFEC43F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{788754C8-D5E1-40DD-A2D8-AA2709129D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{788754C8-D5E1-40DD-A2D8-AA2709129D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{788754C8-D5E1-40DD-A2D8-AA2709129D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DCCFB1D-80FF-45F5-9753-DCB4ACFEC43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DCCFB1D-80FF-45F5-9753-DCB4ACFEC43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCCFB1D-80FF-45F5-9753-DCB4ACFEC43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DCCFB1D-80FF-45F5-9753-DCB4ACFEC43F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

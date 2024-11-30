@@ -10,6 +10,7 @@
     <ProjectReference Include="..\ConsoleGameCore\ConsoleGameCore.csproj" />
     <ProjectReference Include="..\ConsoleUtilsCore\ConsoleUtilsCore.csproj" />
     <ProjectReference Include="..\HackUtilsCore\HackUtilsCore.csproj" />
+    <ProjectReference Include="..\MockingLib\MockingLib.csproj" />
   </ItemGroup>
 
 </Project>
