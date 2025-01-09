@@ -87,7 +87,7 @@ function renderSVG_v1(item) {
     if (item.attributes) {
         for (const name in item.attributes) {
             const value = item.attributes[name];
-            element.setAttributeNS(null, name, value);
+            element.setAttribute(name, value);
         }
     }
     if (item.value) {
@@ -115,7 +115,7 @@ function renderSVG_v2(tag, attributes, ...childs) {
     if (attributes) {
         for (const name in attributes) {
             const value = attributes[name];
-            element.setAttributeNS(null, name, value);
+            element.setAttribute(name, value);
         }
     }
 

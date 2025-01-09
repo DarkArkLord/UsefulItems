@@ -145,7 +145,7 @@
         if (attributes) {
             for (const name in attributes) {
                 const value = attributes[name];
-                element.setAttributeNS(null, name, value);
+                element.setAttribute(name, value);
             }
         }
 

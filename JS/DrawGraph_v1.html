@@ -97,7 +97,7 @@
         if (item.attributes) {
             for (let name in item.attributes) {
                 let value = item.attributes[name];
-                element.setAttributeNS(null, name, value);
+                element.setAttribute(name, value);
             }
         }
         if (item.value) {
